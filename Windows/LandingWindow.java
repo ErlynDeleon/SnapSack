@@ -24,6 +24,7 @@ public class LandingWindow extends JFrame implements ActionListener {
     this.setSize(1500, 900);
     this.setVisible(true);
     this.setLayout(null);
+    this.setLocationRelativeTo(null);
 
     // inside the window
     // title/text design
@@ -58,6 +59,7 @@ public class LandingWindow extends JFrame implements ActionListener {
     if (e.getSource() == button) {
       HomeWindow home = new HomeWindow();
       home.setVisible(true);
+      home.setLocationRelativeTo(null);
       this.dispose();
     }
   }
