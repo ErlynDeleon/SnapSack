@@ -1,10 +1,10 @@
 package Windows;
 
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.Border;
 
 public class LandingWindow extends JFrame implements ActionListener {
   JLabel label = new JLabel();
@@ -26,22 +26,11 @@ public class LandingWindow extends JFrame implements ActionListener {
     this.setLayout(null);
     this.setLocationRelativeTo(null);
 
-    // inside the window
-    // title/text design
-    // label.setText("SnapSack");
-    // label.setForeground(new Color(255, 230, 230));
-    // label.setFont(new Font("Monospaced", Font.BOLD, 50));
-    // label.setHorizontalTextPosition(JLabel.CENTER);
-    // label.setVerticalTextPosition(JLabel.BOTTOM);
-
     // image/logo design
     label.setIcon(image);
     label.setBorder(border);
     label.setVerticalAlignment(JLabel.CENTER);
     label.setHorizontalAlignment(JLabel.CENTER);
-
-    // for image and text
-    // label.setIconTextGap(-100);
 
     // button design to continue to next window
     button.setBounds(668, 540, 150, 50);
@@ -53,13 +42,13 @@ public class LandingWindow extends JFrame implements ActionListener {
 
     this.add(button);
   }
-
+  //for next window
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == button) {
-      HomeWindow home = new HomeWindow();
-      home.setVisible(true);
-      home.setLocationRelativeTo(null);
+      AskUserWindow user = new AskUserWindow();
+      user.setVisible(true);
+      user.setLocationRelativeTo(null);
       this.dispose();
     }
   }
