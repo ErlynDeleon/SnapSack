@@ -1,4 +1,4 @@
-/*import javax.swing.*;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,35 +7,33 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ProductWindow extends JFrame {
+public class ProductGUI extends JFrame {
 
     private JTextField weightField;
     private JButton searchButton;
 
     private List<Product> productList;
 
-    public ProductWindow() {
+    public ProductGUI() {
         setTitle("Snapsack");
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         productList = new ArrayList<>();
-        // Include image paths for each product 
-        productList.add(new Product("a", 2, 40, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("b", 16, 50, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("c", 1.98, 100, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("d", 5, 95, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("e", 11, 200, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("f", 4, 30, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("g", 21, 500, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-        productList.add(new Product("h", 2.21, 800, "C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png"));
-
+        productList.add(new Product("a", 2, 40));
+        productList.add(new Product("b", 16, 50));
+        productList.add(new Product("c", 1.98, 100));
+        productList.add(new Product("d", 5, 95));
+        productList.add(new Product("e", 11, 200));
+        productList.add(new Product("f", 4, 30));
+        productList.add(new Product("g", 21, 500));
+        productList.add(new Product("h", 2.21, 800));
         initUI();
         pack();
         setLocationRelativeTo(null); // Center the frame
         setVisible(true);
     }
-
+//tester
     private void initUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2));
@@ -64,8 +62,7 @@ public class ProductWindow extends JFrame {
 
             Result result = getClosestProducts(targetWeight);
 
-            // Adjust the following line
-            ProductListWindow productListWindow = new ProductListWindow(targetWeight, result.selectedProducts);
+            ProductListWindow productListWindow = new ProductListWindow(result.selectedProducts);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid numeric value for Weight.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -89,13 +86,11 @@ public class ProductWindow extends JFrame {
         String name;
         double weight;
         double amount;
-        String imagePath; // Image path for the product
 
-        public Product(String name, double weight, double amount, String imagePath) {
+        public Product(String name, double weight, double amount) {
             this.name = name;
             this.weight = weight;
             this.amount = amount;
-            this.imagePath = imagePath;
         }
 
         public double getWeight() {
@@ -106,79 +101,44 @@ public class ProductWindow extends JFrame {
         public String toString() {
             return String.format("%-60s %-60s %-60s", name, weight, amount);
         }
-
-        // Getter for the ImageIcon
-        public ImageIcon getImageIcon() {
-            return new ImageIcon(imagePath);
-        }
     }
 
     private class ProductListWindow extends JFrame {
 
-        private final double targetWeight;
-
-        public ProductListWindow(double targetWeight, List<Product> products) {
-            this.targetWeight = targetWeight;
+        public ProductListWindow(List<Product> products) {
             setTitle("Snapsack");
             setSize(900, 600);
-            ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
-            setIconImage(icon.getImage());
-            JPanel panel = new JPanel();
-            panel.setBackground(Color.PINK);
+         
+            ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\sK.jpg");
+
             
-            JEditorPane outputPane = new JEditorPane();
-            outputPane.setContentType("text/html"); // Set content type to HTML
-            outputPane.setEditable(false);
-            JScrollPane scrollPane = new JScrollPane(outputPane);
+            setIconImage(icon.getImage());
+
+            JPanel panel = new JPanel();
+
+            JTextArea outputTextArea = new JTextArea();
+            outputTextArea.setEditable(false);
+            outputTextArea.setBackground(Color.PINK);
 
             // Add header
-            StringBuilder htmlContent = new StringBuilder();
-            htmlContent.append("<html><body>");
-            htmlContent.append(String.format("<h2>PRODUCTS</h2><p>Weight = %.2f</p>", targetWeight));
-            htmlContent.append("<table border='1'><tr><th>Product Name</th><th>Weight</th><th>Amount</th><th>Image</th></tr>");
+            outputTextArea.append(String.format("%-50s %-50s %-50s%n", "Product Name", "Weight", "Amount"));
+            outputTextArea.append("---------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
             for (Product product : products) {
-                htmlContent.append(String.format("<tr><td>%s</td><td>%.2f</td><td>%.2f</td><td><img src='%s' width='100' height='100'/></td></tr>",
-                        product.name, product.weight, product.amount, product.imagePath));
+                outputTextArea.append(product + "\n");
             }
-             
-            
-            htmlContent.append("</table></body></html>");
+            panel.setBackground(Color.PINK);
+            panel.add(new JScrollPane(outputTextArea));
 
-            outputPane.setText(htmlContent.toString());
-
-            panel.add(scrollPane);
-
+            // Set the content pane to your panel
             setContentPane(panel);
-            setLocationRelativeTo(ProductGUI.this);
+
+            setLocationRelativeTo(ProductGUI.this); // Center the frame relative to the main window
             setVisible(true);
         }
     }
-0
-}
-*/
 
-package Windows;
-
-import java.awt.Color;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-public class ProductWindow extends JFrame{
-  JLabel label = new JLabel();
-  ProductWindow(){
-    this.add(label);
-        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
-        this.setIconImage(icon.getImage());
-        this.getContentPane().setBackground(new Color(129, 104, 157));
-        this.setTitle("SnapSack");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setSize(1500, 900);
-        this.setLayout(null);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-  }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ProductGUI());
+    }
 }
