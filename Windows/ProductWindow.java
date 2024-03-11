@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -154,9 +154,31 @@ public class ProductWindow extends JFrame {
             setVisible(true);
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ProductWindow());
-    }
+0
 }
+*/
 
+package Windows;
+
+import java.awt.Color;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class ProductWindow extends JFrame{
+  JLabel label = new JLabel();
+  ProductWindow(){
+    this.add(label);
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
+        this.setIconImage(icon.getImage());
+        this.getContentPane().setBackground(new Color(129, 104, 157));
+        this.setTitle("SnapSack");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(1500, 900);
+        this.setLayout(null);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+  }
+}
