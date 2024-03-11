@@ -46,9 +46,9 @@ public class LandingWindow extends JFrame implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     if (e.getSource() == button) {
-      AskUserWindow user = new AskUserWindow();
-      user.setVisible(true);
-      user.setLocationRelativeTo(null);
+      HomeWindow home = new HomeWindow();
+      home.setVisible(true);
+      home.setLocationRelativeTo(null);
       this.dispose();
     }
   }

@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -141,4 +141,51 @@ public class ProductGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ProductGUI());
     }
+}
+*/
+package Windows;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class ProductWindow extends JFrame implements ActionListener{
+  JLabel label = new JLabel();
+  JButton button = new JButton("Continue");
+  ProductWindow(){
+    this.add(label);
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
+        this.setIconImage(icon.getImage());
+        this.getContentPane().setBackground(new Color(129, 104, 157));
+        this.setTitle("SnapSack");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(1500, 900);
+        this.setLayout(null);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+            button.setBounds(668, 540, 150, 50);
+    button.setFocusable(false);
+    button.setBackground(new Color(210, 145, 188));
+    button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+    button.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
+    button.addActionListener(this);
+
+    this.add(button);
+  }
+  @Override
+  public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == button) {
+      StartingPoint st = new StartingPoint();
+      st.setVisible(true);
+      st.setLocationRelativeTo(null);
+      this.dispose();
+    }
+  }
 }

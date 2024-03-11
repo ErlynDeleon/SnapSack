@@ -10,14 +10,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class RiderHomeWindow extends JFrame {
+public class StartingPoint extends JFrame {
   JLabel label = new JLabel();
   JButton stpeterButton = new JButton("St. Peter");
   JButton stjohnButton = new JButton("St. John");
   JButton lanaoButton = new JButton("Lanao");
   JButton maguindanaoButton = new JButton("Maguindanao");
 
-  public RiderHomeWindow() {
+  public StartingPoint() {
     // general window
     ImageIcon image = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
 
