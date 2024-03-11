@@ -33,7 +33,7 @@ public class ProductGUI extends JFrame {
         setLocationRelativeTo(null); // Center the frame
         setVisible(true);
     }
-//tester
+//input the weight
     private void initUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2));
@@ -109,7 +109,7 @@ public class ProductGUI extends JFrame {
             setTitle("Snapsack");
             setSize(900, 600);
          
-            ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\sK.jpg");
+            ImageIcon icon = new ImageIcon("C:\Users\lyyri\Downloads\1-removebg-preview.png");
 
             
             setIconImage(icon.getImage());
@@ -133,7 +133,7 @@ public class ProductGUI extends JFrame {
             // Set the content pane to your panel
             setContentPane(panel);
 
-            setLocationRelativeTo(ProductGUI.this); // Center the frame relative to the main window
+            setLocationRelativeTo(ProductGUI.this); 
             setVisible(true);
         }
     }
