@@ -11,6 +11,11 @@ public class StPeter extends JFrame {
     private JTextArea displayArea;
     private JTextArea resultTextArea;
 
+    // Public accessor method to retrieve the address field
+    public JTextField getAddressField() {
+        return addressField;
+    }
+
     public StPeter() {
         setTitle("SnapSack");
         setSize(900, 1000); // Set window size to 900 width and 1000 height
@@ -28,7 +33,8 @@ public class StPeter extends JFrame {
         nameField.setFont(new Font("Arial", Font.PLAIN, 16));
         nameField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
 
-        JLabel addressLabel = new JLabel("<html>Enter Your Address:<br>(#No, Street Name, Barangay, Municipality, Province):</html>");
+        JLabel addressLabel = new JLabel(
+                "<html>Enter Your Address:<br>(#No, Street Name, Barangay, Municipality, Province):</html>");
         addressLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         addressField = new JTextField();
         addressField.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -45,29 +51,28 @@ public class StPeter extends JFrame {
         inputPanel.add(addressField);
 
         // Submit Button
-JButton submitButton = new JButton("Submit");
-submitButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
-submitButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String name = nameField.getText();
-        String address = addressField.getText();
-        displayArea.append("Customer's Name: " + name + "\nAddress: " + address + "\n\n");
-        nameField.setText("");
-        addressField.setText("");
-    }
-});
+        JButton submitButton = new JButton("Submit");
+        submitButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String address = addressField.getText();
+                displayArea.append("Customer's Name: " + name + "\nAddress: " + address + "\n\n");
+                nameField.setText("");
+                addressField.setText("");
+            }
+        });
 
-// Next Button
-JButton nextButton = new JButton("Next");
-nextButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
-nextButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        sortAndPrintDistances();
-    }
-});
-
+        // Next Button
+        JButton nextButton = new JButton("Next");
+        nextButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sortAndPrintDistances();
+            }
+        });
 
         // Display Area
         displayArea = new JTextArea();
@@ -115,17 +120,20 @@ nextButton.addActionListener(new ActionListener() {
     }
 
     private void sortAndPrintDistances() {
-        String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
-        int[] distances = {0, 300, 150, 200};
+        String[] locations = { "St. Peter", "St. John", "Lanao", "Maguindanao" };
+        int[] distances = { 0, 300, 150, 200 };
         int n = 4; // manually specify the length
 
         selectionSort(distances, locations, n);
 
         // Construct the string for sorted distances
         StringBuilder output = new StringBuilder();
-        output.append("Distance from \n      St. Peter \n                to ").append(locations[1]).append(" = ").append(distances[1]).append("km");
-        output.append("\n                         to ").append(locations[2]).append(" = ").append(distances[2]).append("km");
-        output.append("\n                                      to ").append(locations[3]).append(" = ").append(distances[3]).append("km");
+        output.append("Distance from \n      St. Peter \n                to ").append(locations[1]).append(" = ")
+                .append(distances[1]).append("km");
+        output.append("\n                         to ").append(locations[2]).append(" = ").append(distances[2])
+                .append("km");
+        output.append("\n                                      to ").append(locations[3]).append(" = ")
+                .append(distances[3]).append("km");
 
         // Set the string to the text area
         resultTextArea.setText(output.toString());
