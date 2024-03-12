@@ -66,6 +66,7 @@ public class SearchWindow extends JFrame {
         add(panel);
         setVisible(true);
     }
+}
 // --------------------------------------------------------------------------------------- 
 /*
         public static void main(String[] args) {
@@ -79,6 +80,7 @@ public class SearchWindow extends JFrame {
     }
 } 
 
+*/
 // -------------------------------------------------------------------------------------
 
 
