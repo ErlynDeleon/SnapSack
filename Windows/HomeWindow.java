@@ -1,40 +1,43 @@
 package Windows;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HomeWindow extends JFrame implements ActionListener {
     JLabel label = new JLabel();
+
+    // For navigation panel
     JPanel navigationPanel = new JPanel(null);
-    JPanel buttonPanel = new JPanel();
     JButton productButton = new JButton("Proceed");
 
-    JPanel mainContainerPanel = new JPanel(null);
+    // For asking user the weight panel
     JPanel askWeightPanel = new JPanel();
     JLabel weightLabel = new JLabel("What is the weight of the motor vehicle?: ");
     JTextField weightTextField = new JTextField();
     JButton submitButton = new JButton("Submit");
 
-    HomeWindow() {
+    // For main panel
+    JPanel mainContainerPanel = new JPanel(null);
+
+
+    HomeWindow(){
+        //navigation panel size and color
         navigationPanel.setBackground(new Color(31, 37, 68));
-        navigationPanel.setBounds(0, 0, 230, 900);
+        navigationPanel.setBounds(1270, 0, 230, 900);
 
         // Add image to the navigation panel
         ImageIcon logo = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
         Image scaleImage = logo.getImage().getScaledInstance(210, 230, Image.SCALE_DEFAULT);
         label.setIcon(new ImageIcon(scaleImage));
-        label.setBounds(10, 10, 210, 230);
+        label.setBounds(0, 300, 210, 200);
         navigationPanel.add(label);
 
-        // Create panel for buttons
-        buttonPanel.setBounds(10, 300, 210, 300);
-        buttonPanel.setBackground(new Color(31, 37, 68));
-        buttonPanel.setLayout(new GridLayout(3, 0, 0, 50));
-
-        buttonPanel.add(productButton);
-
+        // Add button to the navigation panel
+        productButton.setBounds(18, 780, 180, 70);
         productButton.setFocusable(false);
         productButton.setBackground(new Color(210, 145, 188));
         productButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
@@ -48,14 +51,10 @@ public class HomeWindow extends JFrame implements ActionListener {
                 this.dispose();
             }
         });
+        // Add  the productButton to navigationPanel
+        navigationPanel.add(productButton);
 
-        navigationPanel.add(buttonPanel);
-
-        //Main Panel
-        mainContainerPanel.setBackground(new Color(129, 104, 157));
-        mainContainerPanel.setBounds(230, 0, 1270, 900);
-
-        // Create askWeight panel with BorderLayout
+        // Create askWeight panel 
         askWeightPanel.setLayout(null);
         askWeightPanel.setBounds(0, 0, 1270, 50);
         askWeightPanel.setBackground(new Color(255, 230, 230));
@@ -63,17 +62,17 @@ public class HomeWindow extends JFrame implements ActionListener {
         // Set text label properties
         weightLabel.setForeground(new Color(129, 104, 157));
         weightLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
-        weightLabel.setBounds(10, 10, 600, 30);
+        weightLabel.setBounds(25, 10, 600, 30);
 
         // Add weight label to askWeight panel
         askWeightPanel.add(weightLabel);
 
-        // Add text field for weight input
-        weightTextField.setBounds(510, 10, 80, 30);
+        // Add text field for weight input 
+        weightTextField.setBounds(530, 10, 100, 30);
         askWeightPanel.add(weightTextField);
 
         // Add submit button
-        submitButton.setBounds(590, 10, 80, 30);
+        submitButton.setBounds(1170, 10, 80, 30);
         submitButton.setBackground(new Color(210, 145, 188)); 
         submitButton.setForeground(Color.WHITE); 
         submitButton.setFont(new Font("Arial", Font.BOLD, 14)); 
@@ -82,8 +81,9 @@ public class HomeWindow extends JFrame implements ActionListener {
         submitButton.addActionListener(this);
         askWeightPanel.add(submitButton);
 
-        // Add askWeight panel to mainContainerPanel
-        mainContainerPanel.add(askWeightPanel);
+        // Main Panel
+        mainContainerPanel.setBackground(new Color(129, 104, 157));
+        mainContainerPanel.setBounds(0, 50, 1270, 850);
 
         // Frame settings
         this.add(label);
@@ -98,24 +98,57 @@ public class HomeWindow extends JFrame implements ActionListener {
         this.setVisible(true);
         navigationPanel.add(label);
         this.add(navigationPanel);
+        this.add(askWeightPanel);
         this.add(mainContainerPanel);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == submitButton) {
-            String input = weightTextField.getText();
-            try {
-                int weight = Integer.parseInt(input);
-                switch(weight){
-                    case 1: 
-                        
-                    break;
-                }
-            } catch (NumberFormatException ex) {
-                // Invalid input format
-                JOptionPane.showMessageDialog(this, "Invalid input. Please enter a number.");
+    if (e.getSource() == submitButton) {
+        String input = weightTextField.getText();
+        try {
+            double weight = Double.parseDouble(input);
+            
+            // Check if weight is within the valid range
+            if (weight == 1 || weight == 2) {
+                JOptionPane.showMessageDialog(this, "The weight is not accepted. There are no products with this weight.");
             }
+            else if (weight >= 2.5 && weight <= 15) {
+                // If weight is within the valid range, add the product panel
+                JLabel product = new JLabel("Product");
+                product.setForeground(new Color(255, 228, 201));
+                product.setFont(new Font("Monospaced", Font.BOLD, 20));
+                product.setBounds(70, 20, 100, 50); // Adjust bounds as needed
+                mainContainerPanel.add(product);
+
+                if (weight == 2.5) {
+                    JPanel noodles = new JPanel();
+                    noodles.setLayout(null);
+                    noodles.setBackground(new Color(255, 230, 230));
+                    noodles.setBounds(10, 90, 200, 250); 
+                    mainContainerPanel.add(noodles);
+                    
+                    JPanel labelNoodles = new JPanel();
+                    labelNoodles.setBounds(0, 210, 200, 40);
+                    Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+                    labelNoodles.setBorder(border);
+                    noodles.add(labelNoodles);
+                    JLabel noodlesText = new JLabel("Noodles");
+                    noodlesText.setForeground(new Color(129, 104, 157));
+                    noodlesText.setFont(new Font("Monospaced", Font.BOLD, 20));
+                    noodlesText.setBounds(60, 210, 100, 20);
+                    labelNoodles.add(noodlesText);
+                }
+                mainContainerPanel.repaint();
+                mainContainerPanel.revalidate();
+            } else {
+                JOptionPane.showMessageDialog(this, "The weight is not accepted. There are no products with this weight.");
+            }
+            
+        } catch (NumberFormatException ex) {
+            // Invalid input format
+            JOptionPane.showMessageDialog(this, "Invalid input. Please enter a number.");
         }
     }
+}
 }
