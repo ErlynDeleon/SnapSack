@@ -1,43 +1,119 @@
 package Windows;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.border.Border;
-
-import java.awt.*;
 
 public class StPeter extends JFrame {
-    JLabel label = new JLabel();
-    public JTextArea resultTextArea;
-   
-    
-    public StPeter() {
-        
-        ImageIcon image = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
-        this.add(label);
-        this.setIconImage(image.getImage());
-        this.getContentPane().setBackground(new Color(255, 190, 152));
-        this.setTitle("SnapSack");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setSize(900, 1000); // resize
+    private JTextField nameField;
+    private JTextField addressField;
+    private JTextArea displayArea;
+    private JTextArea resultTextArea;
 
-        //dto mag edit ng ano
+    public StPeter() {
+        setTitle("SnapSack");
+        setSize(900, 1000); // Set window size to 900 width and 1000 height
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Input Panel
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+        JLabel nameLabel = new JLabel("Enter Your Name:");
+        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameField = new JTextField();
+        nameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
+
+        JLabel addressLabel = new JLabel("<html>Enter Your Address:<br>(#No, Street Name, Barangay, Municipality, Province):</html>");
+        addressLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        addressField = new JTextField();
+        addressField.setFont(new Font("Arial", Font.PLAIN, 16));
+        addressField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
+
+        // Add more rigid areas to increase height
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 50))); // Add more height
+        inputPanel.add(nameLabel);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add spacing
+        inputPanel.add(nameField);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 0))); // Add spacing
+        inputPanel.add(addressLabel);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add spacing
+        inputPanel.add(addressField);
+
+        // Submit Button
+JButton submitButton = new JButton("Submit");
+submitButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+submitButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String name = nameField.getText();
+        String address = addressField.getText();
+        displayArea.append("Customer's Name: " + name + "\nAddress: " + address + "\n\n");
+        nameField.setText("");
+        addressField.setText("");
+    }
+});
+
+// Next Button
+JButton nextButton = new JButton("Next");
+nextButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+nextButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        sortAndPrintDistances();
+    }
+});
+
+
+        // Display Area
+        displayArea = new JTextArea();
+        displayArea.setEditable(false);
+        displayArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        displayArea.setMargin(new Insets(10, 10, 10, 10));
+        displayArea.setBackground(Color.ORANGE);
+
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        scrollPane.setPreferredSize(new Dimension(500, 500)); // Adjust size to add more height
+
+        // Result TextArea
         resultTextArea = new JTextArea();
         resultTextArea.setEditable(false);
         resultTextArea.setFont(new Font("SansSerif", Font.PLAIN, 32));
         resultTextArea.setMargin(new Insets(10, 10, 10, 10));
         resultTextArea.setBackground(new Color(255, 190, 152));
 
-        // Add the JTextArea to the JFrame
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(resultTextArea, BorderLayout.CENTER);
+        JScrollPane resultScrollPane = new JScrollPane(resultTextArea);
+        resultScrollPane.setPreferredSize(new Dimension(400, 250)); // Adjust size as needed
 
-        // Call the sorting and printing method
-        sortAndPrintDistances();
+        // Add Components to Frame
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(inputPanel, BorderLayout.WEST);
+        topPanel.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(submitButton);
+        buttonPanel.add(nextButton);
+
+        JPanel resultPanel = new JPanel(new BorderLayout());
+        resultPanel.add(resultScrollPane, BorderLayout.CENTER);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(Box.createVerticalGlue()); // Add space above the buttons
+        mainPanel.add(buttonPanel);
+        mainPanel.add(Box.createVerticalGlue()); // Add space below the buttons
+        mainPanel.add(resultPanel);
+
+        add(topPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
 
         setVisible(true); // Make the window visible after all components are added
     }
+
     private void sortAndPrintDistances() {
         String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
         int[] distances = {0, 300, 150, 200};
@@ -47,9 +123,9 @@ public class StPeter extends JFrame {
 
         // Construct the string for sorted distances
         StringBuilder output = new StringBuilder();
-        output.append("St. Peter to ").append(locations[1]).append(" ").append(distances[1]).append("km");
-        output.append(" to ").append(locations[2]).append(" ").append(distances[2]).append("km");
-        output.append(" to ").append(locations[3]).append(" ").append(distances[3]).append("km");
+        output.append("Distance from \n      St. Peter \n                to ").append(locations[1]).append(" = ").append(distances[1]).append("km");
+        output.append("\n                         to ").append(locations[2]).append(" = ").append(distances[2]).append("km");
+        output.append("\n                                      to ").append(locations[3]).append(" = ").append(distances[3]).append("km");
 
         // Set the string to the text area
         resultTextArea.setText(output.toString());
