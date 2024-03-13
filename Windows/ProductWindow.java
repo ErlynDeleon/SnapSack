@@ -16,24 +16,22 @@ public class ProductGUI extends JFrame {
 
     public ProductGUI() {
         setTitle("Snapsack");
-        setSize(1000, 800);
+        setSize(300, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         productList = new ArrayList<>();
-        productList.add(new Product("a", 2, 40));
-        productList.add(new Product("b", 16, 50));
-        productList.add(new Product("c", 1.98, 100));
-        productList.add(new Product("d", 5, 95));
-        productList.add(new Product("e", 11, 200));
-        productList.add(new Product("f", 4, 30));
-        productList.add(new Product("g", 21, 500));
-        productList.add(new Product("h", 2.21, 800));
+        // Include image paths for each product
+        productList.add(new Product("Canned Goods", 5, 450));
+        productList.add(new Product("Cooking Oil", 3, 725));
+        productList.add(new Product("Noodles", 2.5, 375));
+        productList.add(new Product("Soap", 7, 500));
+
         initUI();
         pack();
         setLocationRelativeTo(null); // Center the frame
         setVisible(true);
     }
-//input the weight
+
     private void initUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2));
@@ -62,7 +60,8 @@ public class ProductGUI extends JFrame {
 
             Result result = getClosestProducts(targetWeight);
 
-            ProductListWindow productListWindow = new ProductListWindow(result.selectedProducts);
+            // Adjust the following line
+            displayResult(result.selectedProducts);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid numeric value for Weight.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -78,8 +77,107 @@ public class ProductGUI extends JFrame {
         return result;
     }
 
-    private static class Result {
+    private void displayResult(List<Product> products) {
+        // Find combinations of products whose total weight is less than or equal to the input weight
+        List<List<Product>> combinations = findCombinations(products);
+
+        // Sort the combinations by the difference between total weight and target weight (ascending order)
+        Collections.sort(combinations, Comparator.comparingDouble(combination -> Math.abs(calculateTotalWeight(combination) - Double.parseDouble(weightField.getText()))));
+
+        // Display the result
+        ProductListWindow productListWindow = new ProductListWindow(combinations);
+    }
+
+    private List<List<Product>> findCombinations(List<Product> products) {
+        List<List<Product>> combinations = new ArrayList<>();
+        int n = products.size();
+        for (int i = 1; i < (1 << n); i++) {
+            List<Product> combination = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                if ((i & (1 << j)) > 0) {
+                    combination.add(products.get(j));
+                }
+            }
+            combinations.add(combination);
+        }
+        return combinations;
+    }
+
+    private double calculateTotalWeight(List<Product> products) {
+        double totalWeight = 0;
+        for (Product product : products) {
+            totalWeight += product.getWeight();
+        }
+        return totalWeight;
+    }
+
+    private class Result {
         List<Product> selectedProducts;
+    }
+
+    private class ProductListWindow extends JFrame {
+
+        public ProductListWindow(List<List<Product>> combinations) {
+            setTitle("Snapsack");
+            setSize(500, 750);
+            JPanel panel = new JPanel();
+            panel.setBackground(new Color(255,204,229));
+            
+            ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
+            setIconImage(icon.getImage());
+
+            JEditorPane outputPane = new JEditorPane();
+            outputPane.setContentType("text/html"); // Set content type to HTML
+            outputPane.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(outputPane);
+
+            // Add header
+            StringBuilder htmlContent = new StringBuilder();
+            htmlContent.append("<html><body>");
+            htmlContent.append(String.format("<h2>PRODUCT</h2><p>Weight = %.2f</p>", Double.parseDouble(weightField.getText())));
+            htmlContent.append("<table border='1'><tr><th>Product Names</th><th>Total Weight</th><th>Total Amount</th></tr>");
+          
+            for (List<Product> combination : combinations) {
+                htmlContent.append("<tr><td>");
+                double totalWeight = calculateTotalWeight(combination);
+                double totalAmount = calculateTotalAmount(combination);
+                for (Product product : combination) {
+                    htmlContent.append(product.name).append(", ");
+                }
+                htmlContent.delete(htmlContent.length() - 2, htmlContent.length());  // Remove the trailing comma and space
+                htmlContent.append("</td><td>").append(totalWeight).append("</td><td>").append(totalAmount).append("</td></tr>");
+            }
+
+            htmlContent.append("</table></body></html>");
+
+            outputPane.setText(htmlContent.toString());
+
+            panel.add(scrollPane, BorderLayout.CENTER);
+
+            // Proceed button
+            JButton proceedButton = new JButton("Proceed");
+            proceedButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Add your logic for the "Proceed" button action here
+                    // For now, let's just close the ProductListWindow
+                    dispose();
+                }
+            });
+            panel.add(proceedButton, BorderLayout.SOUTH);
+            setContentPane(panel);
+            setLocationRelativeTo(ProductGUI.this);
+            setVisible(true);
+        }
+
+        // Add a method to calculate the total amount of a combination
+        private double calculateTotalAmount(List<Product> products) {
+            double totalAmount = 0;
+            for (Product product : products) {
+                totalAmount += product.getAmount();
+            }
+            return totalAmount;
+        }
     }
 
     private static class Product {
@@ -97,44 +195,13 @@ public class ProductGUI extends JFrame {
             return weight;
         }
 
+        public double getAmount() {
+            return amount;
+        }
+
         @Override
         public String toString() {
             return String.format("%-60s %-60s %-60s", name, weight, amount);
-        }
-    }
-
-    private class ProductListWindow extends JFrame {
-
-        public ProductListWindow(List<Product> products) {
-            setTitle("Snapsack");
-            setSize(900, 600);
-         
-            ImageIcon icon = new ImageIcon("C:\Users\lyyri\Downloads\1-removebg-preview.png");
-
-            
-            setIconImage(icon.getImage());
-
-            JPanel panel = new JPanel();
-
-            JTextArea outputTextArea = new JTextArea();
-            outputTextArea.setEditable(false);
-            outputTextArea.setBackground(Color.PINK);
-
-            // Add header
-            outputTextArea.append(String.format("%-50s %-50s %-50s%n", "Product Name", "Weight", "Amount"));
-            outputTextArea.append("---------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-
-            for (Product product : products) {
-                outputTextArea.append(product + "\n");
-            }
-            panel.setBackground(Color.PINK);
-            panel.add(new JScrollPane(outputTextArea));
-
-            // Set the content pane to your panel
-            setContentPane(panel);
-
-            setLocationRelativeTo(ProductGUI.this); 
-            setVisible(true);
         }
     }
 
@@ -142,6 +209,7 @@ public class ProductGUI extends JFrame {
         SwingUtilities.invokeLater(() -> new ProductGUI());
     }
 }
+
 */
 package Windows;
 
