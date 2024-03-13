@@ -12,7 +12,8 @@ public class StPeter extends JFrame {
     private JTextField addressField;
     private JTextArea displayArea;
     private JTextArea resultTextArea;
-    
+
+
     // Define locations and distances arrays
     private String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
     private int[][] distances = {
@@ -29,21 +30,21 @@ public class StPeter extends JFrame {
 
     public StPeter() {
         setTitle("SnapSack");
-        setSize(1100, 1000); // Set window size to 900 width and 1000 height
+        setSize(1200, 800); // Set window size to 900 width and 1000 height
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // Input Panel
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
-        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
-        inputPanel.setBackground(new Color(255, 195, 116));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10)); // Add padding
+        inputPanel.setBackground(new Color(249, 232, 151));
 
 
         JLabel nameLabel = new JLabel("Enter Your Name:");
         nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
         nameField = new JTextField();
-        nameField.setFont(new Font("Serif", Font.PLAIN, 16));
+        nameField.setFont(new Font("Serif", Font.PLAIN, 18));
         nameField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
         Border newBorder = BorderFactory.createLineBorder(new Color(100, 32, 170)); // Example: red border
         nameField.setBorder(newBorder);
@@ -54,8 +55,8 @@ public class StPeter extends JFrame {
 
         addressLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
         addressField = new JTextField();
-        addressField.setFont(new Font("Serif", Font.PLAIN, 16));
-        addressField.setMaximumSize(new Dimension(500, 60)); // Limit maximum size
+        addressField.setFont(new Font("Serif", Font.PLAIN, 18));
+        addressField.setMaximumSize(new Dimension(500, 50)); // Limit maximum size
         Border new1Border = BorderFactory.createLineBorder(new Color(100, 32, 170)); // Example: red border
         addressField.setBorder(new1Border);
 
@@ -72,8 +73,8 @@ public class StPeter extends JFrame {
 
 
         // Submit Button
-        JButton submitButton = new JButton("Submit");
-        submitButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+        JButton submitButton = new JButton("SUBMIT");
+        submitButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,10 +86,11 @@ public class StPeter extends JFrame {
                 displayText.append("Address: ").append(address);
 
                 // Setting text and formatting
+                
                 displayArea.setText(displayText.toString());
                 displayArea.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
                 displayArea.setForeground(Color.BLACK);
-                displayArea.setBackground(new Color(249, 232, 151));
+                displayArea.setBackground(new Color(255, 195, 116));
                 displayArea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 // Setting HTML content to JTextArea
@@ -100,9 +102,9 @@ public class StPeter extends JFrame {
             }
         });
 
-        // Next Button
-        JButton distanceButton = new JButton("Distance");
-        distanceButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+        // Distance Button
+        JButton distanceButton = new JButton("DISTANCE");
+        distanceButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
         distanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -110,6 +112,15 @@ public class StPeter extends JFrame {
                 distanceButton.setEnabled(false);
             }
         });
+       
+        JButton proceedButton = new JButton("PROCEED");
+        proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
+       
+        /*submitButton.addActionListener(new ActionListener() {
+            @Override
+    public void actionPerformed(ActionEvent e) {
+        // Add action for the button
+    } */
 
         // Display Area of Customer Name and Address
         displayArea = new JTextArea();
@@ -119,14 +130,15 @@ public class StPeter extends JFrame {
         displayArea.setBackground(new Color(255, 243, 199));
 
         JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setPreferredSize(new Dimension(300, 300)); // Adjust size to add more height
+        scrollPane.setPreferredSize(new Dimension(300, 100)); // Adjust size to add more height
 
         // Result TextArea
         resultTextArea = new JTextArea();
         resultTextArea.setEditable(false);
-        resultTextArea.setFont(new Font("SansSerif", Font.PLAIN, 32));
+        resultTextArea.setFont(new Font("Monospaced", Font.BOLD, 28));
         resultTextArea.setMargin(new Insets(10, 10, 10, 10));
-        resultTextArea.setBackground(new Color(255, 190, 152));
+        resultTextArea.setBackground(new Color(255, 142, 143));
+        resultTextArea.setForeground(Color.BLACK);
 
         JScrollPane resultScrollPane = new JScrollPane(resultTextArea);
         resultScrollPane.setPreferredSize(new Dimension(400, 250)); // Adjust size as needed
@@ -139,6 +151,7 @@ public class StPeter extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(submitButton);
         buttonPanel.add(distanceButton);
+        buttonPanel.add(proceedButton);
 
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.add(resultScrollPane, BorderLayout.CENTER);
@@ -170,7 +183,8 @@ public class StPeter extends JFrame {
         int[] shortestPath = null;
 
         StringBuilder output = new StringBuilder();
-
+        // Print the header line
+    output.append("\tAll Possible Routes Starting on St.Peter Street\n\n");
         for (int[] p : allPaths) {
             int distance = calculateDistance(p);
             if (distance < shortestDistance) {
@@ -180,7 +194,7 @@ public class StPeter extends JFrame {
             output.append(formatPath(p)).append("\n");
         }
 
-        output.append("\nShortest Path:\n").append(formatPath(shortestPath));
+        output.append("\n\t\t\tShortest Path:\n").append(formatPath(shortestPath));
         resultTextArea.setText(output.toString());
     }
 
@@ -192,6 +206,7 @@ public class StPeter extends JFrame {
                 formattedPath.append(" -> ");
             }
         }
+        
         formattedPath.append(" -> ").append(locations[path[0]]).append(" = ").append(calculateDistance(path)).append(" km");
         return formattedPath.toString();
     }
@@ -227,3 +242,7 @@ public class StPeter extends JFrame {
         path[j] = temp;
     }
 }
+    
+  
+  //for next window
+  
