@@ -1,9 +1,13 @@
 package Windows;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StPeter extends JFrame {
     private JTextField nameField;
@@ -18,7 +22,7 @@ public class StPeter extends JFrame {
 
     public StPeter() {
         setTitle("SnapSack");
-        setSize(900, 1000); // Set window size to 900 width and 1000 height
+        setSize(1100, 1000); // Set window size to 900 width and 1000 height
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -26,29 +30,43 @@ public class StPeter extends JFrame {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
-
+        inputPanel.setBackground(new Color(255, 195, 116));
+        
+       
         JLabel nameLabel = new JLabel("Enter Your Name:");
-        nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
         nameField = new JTextField();
-        nameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameField.setFont(new Font("Serif", Font.PLAIN, 16));
         nameField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
+        Border newBorder = BorderFactory.createLineBorder(new Color(100, 32, 170)); // Example: red border
+        nameField.setBorder(newBorder);
 
-        JLabel addressLabel = new JLabel(
-                "<html>Enter Your Address:<br>(#No, Street Name, Barangay, Municipality, Province):</html>");
-        addressLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+
+        JLabel addressLabel = new JLabel("<html>Enter Your Address:<br><font size=\"4\">(#No, Street Name, Barangay, Municipality, Province)</font></html>");
+
+
+        addressLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
         addressField = new JTextField();
-        addressField.setFont(new Font("Arial", Font.PLAIN, 16));
-        addressField.setMaximumSize(new Dimension(500, 30)); // Limit maximum size
+        addressField.setFont(new Font("Serif", Font.PLAIN, 16));
+        addressField.setMaximumSize(new Dimension(500, 60)); // Limit maximum size
+        Border new1Border = BorderFactory.createLineBorder(new Color(100, 32, 170)); // Example: red border
+        addressField.setBorder(new1Border);
+
+
+
 
         // Add more rigid areas to increase height
         inputPanel.add(Box.createRigidArea(new Dimension(0, 50))); // Add more height
         inputPanel.add(nameLabel);
-        inputPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add spacing
-        inputPanel.add(nameField);
         inputPanel.add(Box.createRigidArea(new Dimension(0, 0))); // Add spacing
+        inputPanel.add(nameField);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 40))); // Add spacing
         inputPanel.add(addressLabel);
-        inputPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Add spacing
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 0))); // Add spacing
         inputPanel.add(addressField);
+
+
+        
 
         // Submit Button
         JButton submitButton = new JButton("Submit");
@@ -58,31 +76,47 @@ public class StPeter extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String name = nameField.getText();
                 String address = addressField.getText();
-                displayArea.append("Customer's Name: " + name + "\nAddress: " + address + "\n\n");
+                StringBuilder displayText = new StringBuilder();
+                displayText.append("\t\tCustomer's Information\n\n\n");
+                displayText.append("Customer's Name: ").append(name).append("\n\n\n\n");
+                displayText.append("Address: ").append(address);
+            
+                // Setting text and formatting
+                displayArea.setText(displayText.toString());
+                displayArea.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
+                displayArea.setForeground(Color.BLACK);
+                displayArea.setBackground(new Color(249, 232, 151));
+                displayArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+        // Setting HTML content to JTextArea
                 nameField.setText("");
                 addressField.setText("");
+                nameField.setEnabled(false);
+                addressField.setEnabled(false);
+                submitButton.setEnabled(false);
             }
         });
 
         // Next Button
-        JButton nextButton = new JButton("Next");
-        nextButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
-        nextButton.addActionListener(new ActionListener() {
+        JButton distanceButton = new JButton("Distance");
+        distanceButton.setPreferredSize(new Dimension(430, 60)); // Set preferred size
+        distanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sortAndPrintDistances();
+               // findShortestPath("St. Peter");
+                distanceButton.setEnabled(false);
             }
         });
 
-        // Display Area
+        // Display Area of Customer Name and Address
         displayArea = new JTextArea();
         displayArea.setEditable(false);
-        displayArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        displayArea.setFont(new Font("Bookman Old Style", Font.BOLD, 18));
         displayArea.setMargin(new Insets(10, 10, 10, 10));
-        displayArea.setBackground(Color.ORANGE);
+        displayArea.setBackground(new Color(255, 243, 199));
 
         JScrollPane scrollPane = new JScrollPane(displayArea);
-        scrollPane.setPreferredSize(new Dimension(500, 500)); // Adjust size to add more height
+        scrollPane.setPreferredSize(new Dimension(300, 300)); // Adjust size to add more height
 
         // Result TextArea
         resultTextArea = new JTextArea();
@@ -101,7 +135,7 @@ public class StPeter extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(submitButton);
-        buttonPanel.add(nextButton);
+        buttonPanel.add(distanceButton);
 
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.add(resultScrollPane, BorderLayout.CENTER);
@@ -119,45 +153,5 @@ public class StPeter extends JFrame {
         setVisible(true); // Make the window visible after all components are added
     }
 
-    private void sortAndPrintDistances() {
-        String[] locations = { "St. Peter", "St. John", "Lanao", "Maguindanao" };
-        int[] distances = { 0, 300, 150, 200 };
-        int n = 4; // manually specify the length
-
-        selectionSort(distances, locations, n);
-
-        // Construct the string for sorted distances
-        StringBuilder output = new StringBuilder();
-        output.append("Distance from \n      St. Peter \n                to ").append(locations[1]).append(" = ")
-                .append(distances[1]).append("km");
-        output.append("\n                         to ").append(locations[2]).append(" = ").append(distances[2])
-                .append("km");
-        output.append("\n                                      to ").append(locations[3]).append(" = ")
-                .append(distances[3]).append("km");
-
-        // Set the string to the text area
-        resultTextArea.setText(output.toString());
-    }
-
-    public static void selectionSort(int[] distances, String[] locations, int n) {
-        for (int i = 0; i < n - 1; i++) {
-            int minDistance = distances[i];
-            String minLocation = locations[i];
-            int minIndex = i;
-            for (int j = i + 1; j < n; j++) {
-                if (distances[j] < minDistance) {
-                    minDistance = distances[j];
-                    minLocation = locations[j];
-                    minIndex = j;
-                }
-            }
-            // Swap distances
-            distances[minIndex] = distances[i];
-            distances[i] = minDistance;
-
-            // Swap locations
-            locations[minIndex] = locations[i];
-            locations[i] = minLocation;
-        }
-    }
+// algo for tsp
 }
