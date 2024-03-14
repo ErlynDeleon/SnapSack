@@ -1,37 +1,38 @@
-/* 
 package Windows;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
-public class ProductWindow extends JFrame {
+public class ProductWindow extends JFrame implements ActionListener {
 
     private JTextField weightField;
     private JButton searchButton;
     private JLabel label;
     private JButton button;
-
     private List<Product> productList;
     private double targetWeight; // Added member variable to store the target weight
 
-    // Constructor that accepts weight as a parameter
-    public ProductWindow(double weight) {
-        this.targetWeight = weight;
-        initUI(); // Call the initialization method
-    }
+    private double weight;
+    private JLabel weightLabel = new JLabel();
 
-    // Modified constructor to accept targetWeight
-    public ProductWindow() {
-        setTitle("Snapsack");
-        setSize(300, 750);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    ProductWindow(double weight) {
+        this.weight = weight;
 
-        productList = new ArrayList<>();
+        productList = new ArrayList<>(); // Initialize productList here
 
         productList.add(new Product("Canned Goods", 5, 450));
         productList.add(new Product("Cooking Oil", 3, 725));
@@ -42,49 +43,72 @@ public class ProductWindow extends JFrame {
     }
 
     private void initUI() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2));
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
+        this.setIconImage(icon.getImage());
+        this.getContentPane().setBackground(new Color(129, 104, 157));
+        this.setTitle("SnapSack");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(1500, 900);
+        this.setLayout(null);
+        this.setLocationRelativeTo(null);
 
-        panel.add(new JLabel("Weight:"));
-        weightField = new JTextField();
-        weightField.setText(String.valueOf(targetWeight)); // Set the text field with target weight
-       // Make the text field non-editable
-        panel.add(weightField);
+        label = new JLabel();
+        label.setBounds(100, 100, 200, 50); // Adjust bounds as needed
+        this.add(label);
 
-        searchButton = new JButton("search");
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                searchProducts();
-            }
-        });
-        panel.add(searchButton);
+        button = new JButton("Continue");
+        button.setBounds(668, 540, 150, 50);
+        button.setFocusable(false);
+        button.setBackground(new Color(210, 145, 188));
+        button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+        button.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
+        button.addActionListener(this);
+        this.add(button);
 
-        add(panel); // Add panel to the JFrame
-        setVisible(true); // Make the JFrame visible
+        weightLabel.setBounds(668, 480, 150, 50);
+        weightLabel.setForeground(Color.WHITE);
+        weightLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        weightLabel.setText("Weight: " + weight + " kg");
+        this.add(weightLabel);
+
+        this.setVisible(true);
+
+        searchProducts();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == button) {
+            StartingPoint st = new StartingPoint();
+            st.setVisible(true);
+            st.setLocationRelativeTo(null);
+            this.dispose();
+        }
     }
 
     private void searchProducts() {
-        String weightStr = weightField.getText();
-
-        try {
-            double targetWeight = Double.parseDouble(weightStr);
-
-            Result result = getClosestProducts(targetWeight);
-
-            // Adjust the following line
-            displayResult(result.selectedProducts, targetWeight);
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid numeric value for Weight.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        Result result = getClosestProducts(weight); // Use the provided weight
+        displayResult(result.selectedProducts, weight); // Display the result
     }
 
     private Result getClosestProducts(double targetWeight) {
         Result result = new Result();
         result.selectedProducts = new ArrayList<>(productList);
 
-        // Sort the selected products by proximity to the target weight
-        Collections.sort(result.selectedProducts, Comparator.comparingDouble(product -> Math.abs(product.getWeight() - targetWeight)));
+        // Manually implement bubble sort to sort the selected products by proximity to the target weight
+        for (int i = 0; i < result.selectedProducts.size() - 1; i++) {
+            for (int j = 0; j < result.selectedProducts.size() - i - 1; j++) {
+                double weightDiff1 = Math.abs(result.selectedProducts.get(j).getWeight() - targetWeight);
+                double weightDiff2 = Math.abs(result.selectedProducts.get(j + 1).getWeight() - targetWeight);
+                if (weightDiff1 > weightDiff2) {
+                    // Swap the products
+                    Product temp = result.selectedProducts.get(j);
+                    result.selectedProducts.set(j, result.selectedProducts.get(j + 1));
+                    result.selectedProducts.set(j + 1, temp);
+                }
+            }
+        }
 
         return result;
     }
@@ -93,61 +117,77 @@ public class ProductWindow extends JFrame {
         // Find combinations of products whose total weight is less than or equal to the input weight
         List<List<Product>> combinations = findCombinations(products);
 
-        // Sort the combinations by the difference between total weight and target weight (ascending order)
-        Collections.sort(combinations, Comparator.comparingDouble(combination -> Math.abs(calculateTotalWeight(combination) - targetWeight)));
-
-        // Display the result
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(255, 204, 229));
-
-        ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
-        setIconImage(icon.getImage());
-
-        JEditorPane outputPane = new JEditorPane();
-        outputPane.setContentType("text/html"); // Set content type to HTML
-        outputPane.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(outputPane);
-
-        // Add header
-        StringBuilder htmlContent = new StringBuilder();
-        htmlContent.append("<html><body>");
-        htmlContent.append(String.format("<h2>PRODUCT</h2><p>Weight = %.2f</p>", targetWeight));
-        htmlContent.append("<table border='1'><tr><th>Product Names</th><th>Total Weight</th><th>Total Amount</th></tr>");
-
-        for (List<Product> combination : combinations) {
-            htmlContent.append("<tr><td>");
-            double totalWeight = calculateTotalWeight(combination);
-            double totalAmount = calculateTotalAmount(combination);
-            for (Product product : combination) {
-                htmlContent.append(product.name).append(", ");
+        // Manually implement bubble sort to sort the combinations by the difference between total weight and target weight (ascending order)
+        for (int i = 0; i < combinations.size() - 1; i++) {
+            for (int j = 0; j < combinations.size() - i - 1; j++) {
+                double weightDiff1 = Math.abs(calculateTotalWeight(combinations.get(j)) - targetWeight);
+                double weightDiff2 = Math.abs(calculateTotalWeight(combinations.get(j + 1)) - targetWeight);
+                if (weightDiff1 > weightDiff2) {
+                    // Swap the combinations
+                    List<Product> temp = combinations.get(j);
+                    combinations.set(j, combinations.get(j + 1));
+                    combinations.set(j + 1, temp);
+                }
             }
-            htmlContent.delete(htmlContent.length() - 2, htmlContent.length());  // Remove the trailing comma and space
-            htmlContent.append("</td><td>").append(totalWeight).append("</td><td>").append(totalAmount).append("</td></tr>");
         }
+// Display the result
+JPanel panel = new JPanel();
+panel.setBackground(new Color(255, 204, 229));
+panel.setLayout(new BorderLayout());
+ 
+ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
+setIconImage(icon.getImage());
 
-        htmlContent.append("</table></body></html>");
+JEditorPane outputPane = new JEditorPane();
+outputPane.setContentType("text/html"); // Set content type to HTML
+outputPane.setEditable(false);
+outputPane.setFont(new Font("Arial", Font.PLAIN, 45));
+outputPane.setBackground(new Color(255, 204, 229));
+// Add header
+StringBuilder htmlContent = new StringBuilder();
+htmlContent.append("<html><body>");
+htmlContent.append(String.format("<h2>PRODUCT</h2><p>Weight = %.2f</p>", targetWeight));
+htmlContent.append("<table border='1'><tr><th>Product Names</th><th>Total Weight</th><th>Total Amount</th></tr>");
 
-        outputPane.setText(htmlContent.toString());
-
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        // Proceed button
-        JButton proceedButton = new JButton("Proceed");
-        proceedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StartingPoint st = new StartingPoint();
-                st.setVisible(true);
-                st.setLocationRelativeTo(null);
-                dispose();
-            }
-        });
-        panel.add(proceedButton, BorderLayout.SOUTH);
-        setContentPane(panel);
-        setLocationRelativeTo(this);
-        setVisible(true);
+for (List<Product> combination : combinations) {
+    htmlContent.append("<tr><td>");
+    double totalWeight = calculateTotalWeight(combination);
+    double totalAmount = calculateTotalAmount(combination);
+    for (Product product : combination) {
+        htmlContent.append(product.name).append(", ");
     }
+    htmlContent.delete(htmlContent.length() - 2, htmlContent.length());  // Remove the trailing comma and space
+    htmlContent.append("</td><td>").append(totalWeight).append("</td><td>").append(totalAmount).append("</td></tr>");
+}
 
+htmlContent.append("</table></body></html>");
+
+outputPane.setText(htmlContent.toString());
+
+// Set the size of the JScrollPane to fit the content
+Dimension preferredSize = outputPane.getPreferredSize();
+JScrollPane scrollPane = new JScrollPane(outputPane);
+scrollPane.setPreferredSize(new Dimension(preferredSize.width + 50, preferredSize.height + 50)); // Add some padding
+
+panel.add(scrollPane, BorderLayout.CENTER);
+
+// Proceed button
+JButton proceedButton = new JButton("Proceed");
+proceedButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        StartingPoint st = new StartingPoint();
+        st.setVisible(true);
+        st.setLocationRelativeTo(null);
+        dispose();
+    }
+});
+panel.add(proceedButton, BorderLayout.SOUTH);
+setContentPane(panel);
+pack(); // Pack the frame to fit its contents
+setLocationRelativeTo(this);
+setVisible(true);
+    }
     private List<List<Product>> findCombinations(List<Product> products) {
         List<List<Product>> combinations = new ArrayList<>();
         int n = products.size();
@@ -208,71 +248,3 @@ public class ProductWindow extends JFrame {
         }
     }
 }
-*/ 
-//*
-package Windows;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-public class ProductWindow extends JFrame implements ActionListener {
-
-    private double weight;
-    private JLabel weightLabel = new JLabel();
-
-    JLabel label = new JLabel();
-    JButton button = new JButton("Continue");
-
-    ProductWindow() {
-        this.add(label);
-        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
-        this.setIconImage(icon.getImage());
-        this.getContentPane().setBackground(new Color(129, 104, 157));
-        this.setTitle("SnapSack");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setSize(1500, 900);
-        this.setLayout(null);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-
-        button.setBounds(668, 540, 150, 50);
-        button.setFocusable(false);
-        button.setBackground(new Color(210, 145, 188));
-        button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-        button.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
-        button.addActionListener(this);
-        this.add(button);
-
-        weightLabel.setBounds(668, 480, 150, 50);
-        weightLabel.setForeground(Color.WHITE);
-        weightLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        weightLabel.setText("Weight: " + weight + " kg"); 
-        this.add(weightLabel);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == button) {
-            StartingPoint st = new StartingPoint();
-            st.setVisible(true);
-            st.setLocationRelativeTo(null);
-            this.dispose();
-        }
-    }
-
-    public ProductWindow(double weight) {
-        this(); 
-        this.weight = weight;
-        weightLabel.setText("Weight: " + weight + " kg"); 
-    }
-}
-//*/
