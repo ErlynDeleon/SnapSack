@@ -2,85 +2,89 @@ package Windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SearchWindow extends JFrame {
-    private JTextField searchField;
-    private JButton searchButton;
-    private StPeter stPeter;
+    private JTextArea addressField;
+    private JTextArea searchResultArea;
+    private String inputAddress; // Added field to store the input address
 
-    public SearchWindow(StPeter stPeter) {
-        this.stPeter = stPeter;
+    public SearchWindow(String inputAddress) {
+        this.inputAddress = inputAddress; // Initialize the input address
 
         setTitle("Search Address");
-        setSize(400, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setSize(400, 300);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
+        // Set up the UI components
+        JLabel searchLabel = new JLabel("Search Address:");
+        JTextField searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(200, 30));
 
-        JLabel searchLabel = new JLabel("Enter Address:");
-        searchField = new JTextField(20);
-        searchButton = new JButton("Search");
+        // Create the search button
+        JButton searchButton = new JButton("Search");
         searchButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                String searchText = searchField.getText(); // No need to convert to lowercase
-                JTextField addressField = stPeter.getAddressField(); 
-                String address = addressField.getText(); 
-
-                int count = 0;
-                StringBuilder positions = new StringBuilder();
-                int wordStart = -1;
-
-                for (int i = 0; i < address.length(); i++) {
-                    char currentChar = address.charAt(i);
-                    if (Character.isWhitespace(currentChar) || i == address.length() - 1) {
-                        if (wordStart != -1) {
-                            String word = address.substring(wordStart, i);
-                            if (word.equalsIgnoreCase(searchText)) {
-                                count++;
-                                positions.append(wordStart).append(", ");
-                            }
-                            wordStart = -1;
-                        }
-                    } else {
-                        if (wordStart == -1) {
-                            wordStart = i;
-                        }
-                    }
-                }
-
-                if (count > 0) {
-                    JOptionPane.showMessageDialog(null, "Occurrences: " + count + "\nPositions: " + positions.toString());
-                } else {
-                    JOptionPane.showMessageDialog(null, "No occurrences found.");
-                }
+                String searchText = searchField.getText();
+                search(searchText);
             }
         });
 
-        panel.add(searchLabel);
-        panel.add(searchField);
-        panel.add(searchButton);
+        // Set up the search result area
+        searchResultArea = new JTextArea();
+        searchResultArea.setEditable(false);
+        JScrollPane resultScrollPane = new JScrollPane(searchResultArea);
 
-        add(panel);
+        // Arrange UI components
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.add(searchLabel, BorderLayout.WEST);
+        panel.add(searchField, BorderLayout.CENTER);
+        panel.add(searchButton, BorderLayout.EAST);
+        add(panel, BorderLayout.NORTH);
+        add(resultScrollPane, BorderLayout.CENTER);
+
         setVisible(true);
     }
-}
-// --------------------------------------------------------------------------------------- 
-/*
-        public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                // Create an instance of StPeter and pass it to the SearchWindow constructor
-                StPeter stPeter = new StPeter();
-                new SearchWindow(stPeter);
+
+    private void search(String searchText) {
+        String lowercaseInputAddress = inputAddress.toLowerCase();
+        String lowercaseSearchText = searchText.toLowerCase();
+
+        int occurrences = 0;
+        StringBuilder positions = new StringBuilder();
+
+        int index = lowercaseInputAddress.indexOf(lowercaseSearchText);
+        while (index != -1) {
+            occurrences++;
+            if (positions.length() > 0) {
+                positions.append(", ");
             }
-        });
+            positions.append(getWordPosition(inputAddress, index));
+            index = lowercaseInputAddress.indexOf(lowercaseSearchText, index + 1);
+        }
+
+        StringBuilder result = new StringBuilder();
+        if (occurrences > 0) {
+            result.append("Address: ").append(inputAddress).append("\n");
+            result.append("Number of Occurrences: ").append(occurrences).append("\n");
+            result.append("Word's Position: ").append(positions);
+        } else {
+            result.append("No occurrences found for the word \"").append(searchText).append("\"");
+        }
+
+        searchResultArea.setText(result.toString());
     }
-} 
 
-*/
-// -------------------------------------------------------------------------------------
-
-
+    private int getWordPosition(String inputAddress, int currentIndex) {
+        int position = 1;
+        for (int i = 0; i < currentIndex; i++) {
+            if (inputAddress.charAt(i) == ' ') {
+                position++;
+            }
+        }
+        return position;
+    }
+}
