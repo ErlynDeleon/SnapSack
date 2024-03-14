@@ -28,6 +28,7 @@ public class HomeWindow extends JFrame implements ActionListener {
 
     HomeWindow() {
         //navigation panel size and color
+        navigationPanel.setLayout(null);
         navigationPanel.setBackground(new Color(31, 37, 68));
         navigationPanel.setBounds(1270, 0, 230, 900);
 
@@ -54,8 +55,9 @@ public class HomeWindow extends JFrame implements ActionListener {
 
                 JOptionPane.showMessageDialog(this, "Please enter the weight before proceeding.", "Missing Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
             } else {
+                double weight = Double.parseDouble(weightTextField.getText());
                 if (e.getSource() == productButton) {
-                    ProductWindow pd = new ProductWindow();
+                    ProductWindow pd = new ProductWindow(weight);
                     pd.setVisible(true);
                     pd.setLocationRelativeTo(null);
                     dispose();
@@ -280,7 +282,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         totalAmountPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); 
         totalAmountPanel.setBackground(new Color(255, 230, 230));
     
-        totalAmountPanel.setBounds(18, 730, 190, 70);
+        totalAmountPanel.setBounds(18, 730, 180, 130); 
         Border amountPanelBorder = BorderFactory.createLineBorder(new Color(210, 145, 188), 1);
         totalAmountPanel.setBorder(amountPanelBorder);
         navigationPanel.add(totalAmountPanel); 
@@ -290,9 +292,9 @@ public class HomeWindow extends JFrame implements ActionListener {
         totalAmountTextLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
         totalAmountPanel.add(totalAmountTextLabel);
     
-        JLabel totalAmountLabel = new JLabel(String.format("%.2f  ", totalAmount)); 
+        JLabel totalAmountLabel = new JLabel(String.format("%.2f  ", totalAmount));
         totalAmountLabel.setForeground(new Color(129, 104, 157));
-        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, 14)); 
+        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
     
         int fontSize = Math.min(16, 100 / totalAmountLabel.getText().length()); 
         totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, fontSize)); 

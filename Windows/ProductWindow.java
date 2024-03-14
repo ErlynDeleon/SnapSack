@@ -214,6 +214,7 @@ public class ProductGUI extends JFrame {
 package Windows;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -223,11 +224,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class ProductWindow extends JFrame implements ActionListener{
-  JLabel label = new JLabel();
-  JButton button = new JButton("Continue");
-  ProductWindow(){
-    this.add(label);
+public class ProductWindow extends JFrame implements ActionListener {
+
+    private double weight;
+    private JLabel weightLabel = new JLabel();
+
+    JLabel label = new JLabel();
+    JButton button = new JButton("Continue");
+
+    ProductWindow() {
+        this.add(label);
         ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
         this.setIconImage(icon.getImage());
         this.getContentPane().setBackground(new Color(129, 104, 157));
@@ -238,22 +244,35 @@ public class ProductWindow extends JFrame implements ActionListener{
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-            button.setBounds(668, 540, 150, 50);
-    button.setFocusable(false);
-    button.setBackground(new Color(210, 145, 188));
-    button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
-    button.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
-    button.addActionListener(this);
 
-    this.add(button);
-  }
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == button) {
-      StartingPoint st = new StartingPoint();
-      st.setVisible(true);
-      st.setLocationRelativeTo(null);
-      this.dispose();
+        button.setBounds(668, 540, 150, 50);
+        button.setFocusable(false);
+        button.setBackground(new Color(210, 145, 188));
+        button.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+        button.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
+        button.addActionListener(this);
+        this.add(button);
+
+        weightLabel.setBounds(668, 480, 150, 50);
+        weightLabel.setForeground(Color.WHITE);
+        weightLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        weightLabel.setText("Weight: " + weight + " kg"); 
+        this.add(weightLabel);
     }
-  }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == button) {
+            StartingPoint st = new StartingPoint();
+            st.setVisible(true);
+            st.setLocationRelativeTo(null);
+            this.dispose();
+        }
+    }
+
+    public ProductWindow(double weight) {
+        this(); 
+        this.weight = weight;
+        weightLabel.setText("Weight: " + weight + " kg"); 
+    }
 }
