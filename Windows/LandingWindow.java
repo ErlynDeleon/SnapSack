@@ -9,7 +9,7 @@ import javax.swing.border.Border;
 public class LandingWindow extends JFrame implements ActionListener {
   JLabel label = new JLabel();
   JButton button = new JButton("Continue");
-  ImageIcon image = new ImageIcon("SnapSack\\Windows\\pictures\\2-removebg-preview.png");
+  ImageIcon image = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
   Border border = BorderFactory.createLineBorder(new Color(254, 200, 216), 5);
 
   LandingWindow() {

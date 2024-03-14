@@ -1,3 +1,4 @@
+
 package Windows;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         navigationPanel.setBounds(1270, 0, 230, 900);
 
         // Add image to the navigation panel
-        ImageIcon logo = new ImageIcon("SnapSack\\Windows\\pictures\\2-removebg-preview.png");
+        ImageIcon logo = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
         Image scaleImage = logo.getImage().getScaledInstance(210, 230, Image.SCALE_DEFAULT);
         label.setIcon(new ImageIcon(scaleImage));
         label.setBounds(0, 300, 210, 200);
@@ -106,7 +107,7 @@ public class HomeWindow extends JFrame implements ActionListener {
 
         // Frame settings
         this.add(label);
-        ImageIcon icon = new ImageIcon("SnapSack\\Windows\\pictures\\1-removebg-preview.png");
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
         this.setIconImage(icon.getImage());
         this.setTitle("SnapSack");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -296,10 +297,10 @@ public class HomeWindow extends JFrame implements ActionListener {
     static List<Product> products = new ArrayList<>();
 
     static {
-        products.add(new Product("Canned Goods", 5, 450, "SnapSack\\Windows\\pictures\\Rice rat Can Organizer for Pantry, Can Rack Can Storage Dispenser for Canned Food (5 tiers).jfif"));
-        products.add(new Product("Cooking Oil", 3, 725, "SnapSack\\Windows\\pictures\\Substituting Oil for Butter in Recipes.jfif"));
-        products.add(new Product("Noodles", 2.5, 375, "SnapSack\\Windows\\pictures\\download.jfif"));
-        products.add(new Product("Soap", 7, 500, "SnapSack\\Windows\\pictures\\Untitled.jfif"));
+        products.add(new Product("Canned Goods", 5, 450, "Windows\\pictures\\Rice rat Can Organizer for Pantry, Can Rack Can Storage Dispenser for Canned Food (5 tiers).jfif"));
+        products.add(new Product("Cooking Oil", 3, 725, "Windows\\pictures\\Substituting Oil for Butter in Recipes.jfif"));
+        products.add(new Product("Noodles", 2.5, 375, "Windows\\pictures\\download.jfif"));
+        products.add(new Product("Soap", 7, 500, "Windows\\pictures\\Untitled.jfif"));
     }
 
     static List<Product> selectProductsForWeight(double weight) {
