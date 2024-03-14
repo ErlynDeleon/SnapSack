@@ -116,11 +116,16 @@ public class StPeter extends JFrame {
         JButton proceedButton = new JButton("PROCEED");
         proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
        
-        /*submitButton.addActionListener(new ActionListener() {
-            @Override
-    public void actionPerformed(ActionEvent e) {
-        // Add action for the button
-    } */
+        proceedButton.addActionListener(new ActionListener() {
+           
+        @Override
+            public void actionPerformed(ActionEvent e) {
+                SearchWindow sw = new SearchWindow(null);
+                sw.setVisible(true);
+                sw.setLocationRelativeTo(null);
+                dispose();
+            }
+        });
 
         // Display Area of Customer Name and Address
         displayArea = new JTextArea();
@@ -179,7 +184,7 @@ public class StPeter extends JFrame {
         ArrayList<int[]> allPaths = new ArrayList<>();
         permute(path, 1, allPaths); // Start permutation from index 1
 
-        int shortestDistance = 1000000; // Set an arbitrary large value
+        int shortestDistance = 10000; // Set an arbitrary large value
         int[] shortestPath = null;
 
         StringBuilder output = new StringBuilder();
@@ -195,7 +200,7 @@ public class StPeter extends JFrame {
         }
 
         output.append("\n\t\t\tShortest Path:\n").append(formatPath(shortestPath));
-        resultTextArea.setText(output.toString());
+        resultTextArea.setText(output + "");
     }
 
     private String formatPath(int[] path) {
