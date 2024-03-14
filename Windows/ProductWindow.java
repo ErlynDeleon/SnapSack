@@ -1,6 +1,7 @@
 package Windows;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -129,59 +130,64 @@ public class ProductWindow extends JFrame implements ActionListener {
                 }
             }
         }
+// Display the result
+JPanel panel = new JPanel();
+panel.setBackground(new Color(255, 204, 229));
+panel.setLayout(new BorderLayout());
+ 
+ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
+setIconImage(icon.getImage());
 
-        // Display the result
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(255, 204, 229));
+JEditorPane outputPane = new JEditorPane();
+outputPane.setContentType("text/html"); // Set content type to HTML
+outputPane.setEditable(false);
+outputPane.setFont(new Font("Arial", Font.PLAIN, 45));
+outputPane.setBackground(new Color(255, 204, 229));
+// Add header
+StringBuilder htmlContent = new StringBuilder();
+htmlContent.append("<html><body>");
+htmlContent.append(String.format("<h2>PRODUCT</h2><p>Weight = %.2f</p>", targetWeight));
+htmlContent.append("<table border='1'><tr><th>Product Names</th><th>Total Weight</th><th>Total Amount</th></tr>");
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\1-removebg-preview.png");
-        setIconImage(icon.getImage());
-
-        JEditorPane outputPane = new JEditorPane();
-        outputPane.setContentType("text/html"); // Set content type to HTML
-        outputPane.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(outputPane);
-
-        // Add header
-        StringBuilder htmlContent = new StringBuilder();
-        htmlContent.append("<html><body>");
-        htmlContent.append(String.format("<h2>PRODUCT</h2><p>Weight = %.2f</p>", targetWeight));
-        htmlContent.append("<table border='1'><tr><th>Product Names</th><th>Total Weight</th><th>Total Amount</th></tr>");
-
-        for (List<Product> combination : combinations) {
-            htmlContent.append("<tr><td>");
-            double totalWeight = calculateTotalWeight(combination);
-            double totalAmount = calculateTotalAmount(combination);
-            for (Product product : combination) {
-                htmlContent.append(product.name).append(", ");
-            }
-            htmlContent.delete(htmlContent.length() - 2, htmlContent.length());  // Remove the trailing comma and space
-            htmlContent.append("</td><td>").append(totalWeight).append("</td><td>").append(totalAmount).append("</td></tr>");
-        }
-
-        htmlContent.append("</table></body></html>");
-
-        outputPane.setText(htmlContent.toString());
-
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        // Proceed button
-        JButton proceedButton = new JButton("Proceed");
-        proceedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StartingPoint st = new StartingPoint();
-                st.setVisible(true);
-                st.setLocationRelativeTo(null);
-                dispose();
-            }
-        });
-        panel.add(proceedButton, BorderLayout.SOUTH);
-        setContentPane(panel);
-        setLocationRelativeTo(this);
-        setVisible(true);
+for (List<Product> combination : combinations) {
+    htmlContent.append("<tr><td>");
+    double totalWeight = calculateTotalWeight(combination);
+    double totalAmount = calculateTotalAmount(combination);
+    for (Product product : combination) {
+        htmlContent.append(product.name).append(", ");
     }
+    htmlContent.delete(htmlContent.length() - 2, htmlContent.length());  // Remove the trailing comma and space
+    htmlContent.append("</td><td>").append(totalWeight).append("</td><td>").append(totalAmount).append("</td></tr>");
+}
 
+htmlContent.append("</table></body></html>");
+
+outputPane.setText(htmlContent.toString());
+
+// Set the size of the JScrollPane to fit the content
+Dimension preferredSize = outputPane.getPreferredSize();
+JScrollPane scrollPane = new JScrollPane(outputPane);
+scrollPane.setPreferredSize(new Dimension(preferredSize.width + 50, preferredSize.height + 50)); // Add some padding
+
+panel.add(scrollPane, BorderLayout.CENTER);
+
+// Proceed button
+JButton proceedButton = new JButton("Proceed");
+proceedButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        StartingPoint st = new StartingPoint();
+        st.setVisible(true);
+        st.setLocationRelativeTo(null);
+        dispose();
+    }
+});
+panel.add(proceedButton, BorderLayout.SOUTH);
+setContentPane(panel);
+pack(); // Pack the frame to fit its contents
+setLocationRelativeTo(this);
+setVisible(true);
+    }
     private List<List<Product>> findCombinations(List<Product> products) {
         List<List<Product>> combinations = new ArrayList<>();
         int n = products.size();
