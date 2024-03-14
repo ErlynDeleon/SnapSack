@@ -1,4 +1,4 @@
-///* 
+/* 
 package Windows;
 import javax.swing.*;
 import java.awt.*;
@@ -208,8 +208,8 @@ public class ProductWindow extends JFrame {
         }
     }
 }
-//*/ 
-/*
+*/ 
+//*
 package Windows;
 
 import java.awt.Color;
@@ -275,4 +275,4 @@ public class ProductWindow extends JFrame implements ActionListener {
         weightLabel.setText("Weight: " + weight + " kg"); 
     }
 }
-*/
+//*/

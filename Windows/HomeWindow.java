@@ -297,22 +297,19 @@ public class HomeWindow extends JFrame implements ActionListener {
         totalAmountPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); 
         totalAmountPanel.setBackground(new Color(255, 230, 230));
     
-        totalAmountPanel.setBounds(18, 730, 180, 130); 
+        totalAmountPanel.setBounds(18, 700, 180, 130); 
         Border amountPanelBorder = BorderFactory.createLineBorder(new Color(210, 145, 188), 1);
         totalAmountPanel.setBorder(amountPanelBorder);
         navigationPanel.add(totalAmountPanel); 
     
-        JLabel totalAmountTextLabel = new JLabel("TOTAL AMOUNT:");
+        JLabel totalAmountTextLabel = new JLabel("     TOTAL AMOUNT:   ");
         totalAmountTextLabel.setForeground(new Color(129, 104, 157));
-        totalAmountTextLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
+        totalAmountTextLabel.setFont(new Font("Monospaced", Font.BOLD, 16));
         totalAmountPanel.add(totalAmountTextLabel);
     
-        JLabel totalAmountLabel = new JLabel(String.format("%.2f  ", totalAmount));
+        JLabel totalAmountLabel = new JLabel(String.format("       %.2f", totalAmount));
         totalAmountLabel.setForeground(new Color(129, 104, 157));
-        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
-    
-        int fontSize = Math.min(16, 100 / totalAmountLabel.getText().length()); 
-        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, fontSize)); 
+        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, 16));
         totalAmountPanel.add(totalAmountLabel); 
     }
 
