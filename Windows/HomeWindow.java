@@ -46,11 +46,20 @@ public class HomeWindow extends JFrame implements ActionListener {
         productButton.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
         productButton.setFocusPainted(false);
         productButton.addActionListener((ActionEvent e) -> {
-            if (e.getSource() == productButton) {
-                ProductWindow pd = new ProductWindow();
-                pd.setVisible(true);
-                pd.setLocationRelativeTo(null);
-                this.dispose();
+            if (weightTextField.getText().isEmpty()) {
+
+                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (3).jfif"); 
+                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);       
+
+                JOptionPane.showMessageDialog(this, "Please enter the weight before proceeding.", "Missing Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
+            } else {
+                if (e.getSource() == productButton) {
+                    ProductWindow pd = new ProductWindow();
+                    pd.setVisible(true);
+                    pd.setLocationRelativeTo(null);
+                    dispose();
+                }
             }
         });
         // Add  the productButton to navigationPanel
@@ -128,17 +137,29 @@ public class HomeWindow extends JFrame implements ActionListener {
             try {
                 double weight = Double.parseDouble(weightTextField.getText());
                 if (weight < 1 || weight > 15) {
-                    JOptionPane.showMessageDialog(this, "Invalid weight. Please enter a value between 1 and 15 kilos.");
+                    ImageIcon icon = new ImageIcon("Windows\\pictures\\download (2).jfif"); 
+                    Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+                    JOptionPane.showMessageDialog(this, "Invalid weight. Please enter a value between 1 and 15 kilos.", "Invalid Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
                 } else {
                     List<Product> selectedProducts = selectProductsForWeight(weight);
                     if (selectedProducts.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "No products found for the given weight.");
+                        ImageIcon icon = new ImageIcon("Windows\\\\pictures\\\\download (1).jfif"); 
+                        Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+                        JOptionPane.showMessageDialog(this, "No products found for the given weight.", "No Products", JOptionPane.WARNING_MESSAGE, scaledIcon);
                     } else {
                         displayProducts(selectedProducts);
                     }
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.");
+                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (4).jfif"); 
+                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+                JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.", "Numbers only!", JOptionPane.WARNING_MESSAGE, scaledIcon);
             }
         }
     }
@@ -167,7 +188,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         labelPanel.setBounds(150, 0, 1270, 50);
         mainContainerPanel.add(labelPanel);
 
-        int yPosition = 70; // Initial y position for product panels
+        int yPosition = 70;
 
         for (Product product : products) {
             // Display product information
@@ -179,12 +200,10 @@ public class HomeWindow extends JFrame implements ActionListener {
             productPanel.setBorder(productPanelBorder);
             mainContainerPanel.add(productPanel);
 
-            // Load and scale the image
             ImageIcon productImageIcon = new ImageIcon(product.imagePath);
             Image productImage = productImageIcon.getImage().getScaledInstance(190, 150, Image.SCALE_SMOOTH);
             ImageIcon scaledProductImageIcon = new ImageIcon(productImage);
 
-            // Create a JLabel with the scaled image
             JLabel productImageLabel = new JLabel(scaledProductImageIcon);
             productImageLabel.setBounds(0, 0, 200, 160);
             productPanel.add(productImageLabel);
@@ -210,7 +229,6 @@ public class HomeWindow extends JFrame implements ActionListener {
             weightPanelText.setForeground(new Color(129, 104, 157));
             weightPanelText.setFont(new Font("Monospaced", Font.BOLD, 20));
 
-            // Calculate the position to center the text horizontally
             int textWidthWeight = weightPanelText.getPreferredSize().width;
             int textHeightWeight = weightPanelText.getPreferredSize().height;
             int panelWidthWeight = weightPanel.getWidth();
@@ -222,15 +240,14 @@ public class HomeWindow extends JFrame implements ActionListener {
             weightPanel.add(weightPanelText);
 
             //for amount
-            JPanel amountPanel = new JPanel(null); // Use null layout to position the text manually
+            JPanel amountPanel = new JPanel(null); 
             amountPanel.setBounds(940, yPosition + 70, 200, 40);
             mainContainerPanel.add(amountPanel);
 
-            JLabel amountPanelText = new JLabel(String.valueOf(product.amount)); // Convert double to String
+            JLabel amountPanelText = new JLabel(String.valueOf(product.amount));
             amountPanelText.setForeground(new Color(129, 104, 157));
             amountPanelText.setFont(new Font("Monospaced", Font.BOLD, 20));
 
-            // Calculate the position to center the text horizontally
             int textWidthAmount = amountPanelText.getPreferredSize().width;
             int textHeightAmount = amountPanelText.getPreferredSize().height;
             int panelWidthAmount = amountPanel.getWidth();
@@ -243,9 +260,8 @@ public class HomeWindow extends JFrame implements ActionListener {
             yPosition += 250;
         }
 
-        // Calculate and display total amount
         double totalAmount = calculateTotalAmount(products);
-        displayTotalAmount(totalAmount, yPosition + 50);
+        displayTotalAmount(totalAmount);
 
         mainContainerPanel.revalidate();
         mainContainerPanel.repaint();
@@ -259,19 +275,28 @@ public class HomeWindow extends JFrame implements ActionListener {
         return totalAmount;
     }
 
-    private void displayTotalAmount(double totalAmount, int yPosition) {
+    private void displayTotalAmount(double totalAmount) {
         JPanel totalAmountPanel = new JPanel();
-        totalAmountPanel.setLayout(null);
+        totalAmountPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); 
         totalAmountPanel.setBackground(new Color(255, 230, 230));
-        totalAmountPanel.setBounds(913, yPosition, 250, 50);
+    
+        totalAmountPanel.setBounds(18, 730, 190, 70);
         Border amountPanelBorder = BorderFactory.createLineBorder(new Color(210, 145, 188), 1);
         totalAmountPanel.setBorder(amountPanelBorder);
-        mainContainerPanel.add(totalAmountPanel);
-
-        JLabel totalAmountPanelText = new JLabel("Total Amount: " + totalAmount); // Convert double to String
-        totalAmountPanelText.setForeground(new Color(129, 104, 157));
-        totalAmountPanelText.setFont(new Font("Monospaced", Font.BOLD, 20));
-        totalAmountPanel.add(totalAmountPanelText);
+        navigationPanel.add(totalAmountPanel); 
+    
+        JLabel totalAmountTextLabel = new JLabel("TOTAL AMOUNT:");
+        totalAmountTextLabel.setForeground(new Color(129, 104, 157));
+        totalAmountTextLabel.setFont(new Font("Monospaced", Font.BOLD, 14));
+        totalAmountPanel.add(totalAmountTextLabel);
+    
+        JLabel totalAmountLabel = new JLabel(String.format("%.2f  ", totalAmount)); 
+        totalAmountLabel.setForeground(new Color(129, 104, 157));
+        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, 14)); 
+    
+        int fontSize = Math.min(16, 100 / totalAmountLabel.getText().length()); 
+        totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, fontSize)); 
+        totalAmountPanel.add(totalAmountLabel); 
     }
     static class Product {
         String name;
@@ -306,8 +331,7 @@ public class HomeWindow extends JFrame implements ActionListener {
     static List<Product> selectProductsForWeight(double weight) {
         List<Product> selectedProducts = new ArrayList<>();
         int n = products.size();
-        int max = (1 << n); // Total number of combinations
-
+        int max = (1 << n); 
         double closestWeightDiff = Double.MAX_VALUE;
         double bestWeight = 0;
 
@@ -325,7 +349,6 @@ public class HomeWindow extends JFrame implements ActionListener {
                 }
             }
 
-            // Check if the combination is valid and closer to the input weight
             if (totalWeight <= weight) {
                 double diff = Math.abs(weight - totalWeight);
                 if (diff < closestWeightDiff) {
