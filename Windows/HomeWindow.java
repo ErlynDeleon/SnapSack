@@ -1,4 +1,3 @@
-
 package Windows;
 
 import javax.swing.*;
@@ -15,6 +14,7 @@ public class HomeWindow extends JFrame implements ActionListener {
     // For navigation panel
     JPanel navigationPanel = new JPanel(null);
     JButton productButton = new JButton("Proceed");
+    boolean weightSubmitted = false; //ito set natin sa false para pag di pa nag susubmit si user ng input di pa pwede mag proceed
 
     // For asking user the weight panel
     JPanel askWeightPanel = new JPanel();
@@ -46,25 +46,10 @@ public class HomeWindow extends JFrame implements ActionListener {
         productButton.setBorder(BorderFactory.createRaisedSoftBevelBorder());
         productButton.setBorder(BorderFactory.createLineBorder(new Color(149, 125, 173), 3));
         productButton.setFocusPainted(false);
-        productButton.addActionListener((ActionEvent e) -> {
-            if (weightTextField.getText().isEmpty()) {
+        productButton.addActionListener(this);
+        productButton.setEnabled(false); 
 
-                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (3).jfif"); 
-                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
-                ImageIcon scaledIcon = new ImageIcon(scaledImage);       
-
-                JOptionPane.showMessageDialog(this, "Please enter the weight before proceeding.", "Missing Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
-            } else {
-                double weight = Double.parseDouble(weightTextField.getText());
-                if (e.getSource() == productButton) {
-                    ProductWindow pd = new ProductWindow(weight);
-                    pd.setVisible(true);
-                    pd.setLocationRelativeTo(null);
-                    dispose();
-                }
-            }
-        });
-        // Add  the productButton to navigationPanel
+        // Add the productButton to navigationPanel
         navigationPanel.add(productButton);
 
         // Create askWeight panel
@@ -84,6 +69,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         weightTextField.setBounds(400, 10, 100, 30);
         askWeightPanel.add(weightTextField);
 
+        //Add refresh button for weight input panel
         refreshButton.setFocusable(false);
         refreshButton.setBackground(new Color(210, 145, 188));
         refreshButton.setForeground(Color.WHITE);
@@ -92,14 +78,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         refreshButton.setBorder(BorderFactory.createEtchedBorder());
         refreshButton.setFocusPainted(false);
         refreshButton.setBounds(1100, 10, 150, 30);
-        refreshButton.addActionListener((ActionEvent e) -> {
-            if (e.getSource() == refreshButton) {
-                HomeWindow home = new HomeWindow();
-                home.setVisible(true);
-                home.setLocationRelativeTo(null);
-                this.dispose();
-            }
-        });
+        refreshButton.addActionListener(this);
         askWeightPanel.add(refreshButton);
 
         // Add submit button
@@ -133,42 +112,72 @@ public class HomeWindow extends JFrame implements ActionListener {
         this.add(mainContainerPanel);
     }
 
+    //eto pag pinindot na yung submit button
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == submitButton) {
             try {
                 double weight = Double.parseDouble(weightTextField.getText());
+                //pag mas mababa sa 1 at mas malaki sa 15 yung input
                 if (weight < 1 || weight > 15) {
-                    ImageIcon icon = new ImageIcon("Windows\\pictures\\download (2).jfif"); 
-                    Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                    ImageIcon icon = new ImageIcon("Windows\\pictures\\download (2).jfif");
+                    Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
                     ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
                     JOptionPane.showMessageDialog(this, "Invalid weight. Please enter a value between 1 and 15 kilos.", "Invalid Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
                 } else {
                     List<Product> selectedProducts = selectProductsForWeight(weight);
+                    //pag wala siyang nilagay na input
                     if (selectedProducts.isEmpty()) {
                         ImageIcon icon = new ImageIcon("Windows\\\\pictures\\\\download (1).jfif"); 
                         Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
                         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
                         JOptionPane.showMessageDialog(this, "No products found for the given weight.", "No Products", JOptionPane.WARNING_MESSAGE, scaledIcon);
-                    } else {
+                    }else {
+                        //pag meron na siyang nilagay na input
+                        weightSubmitted = true;
                         displayProducts(selectedProducts);
+                        //makikita na din yung proceed input pag may sinubmit na valid yung user
+                        productButton.setEnabled(true);
                     }
                 }
             } catch (NumberFormatException ex) {
-                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (4).jfif"); 
-                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (4).jfif");
+                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
                 JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid number.", "Numbers only!", JOptionPane.WARNING_MESSAGE, scaledIcon);
             }
+        } else if (e.getSource() == productButton) { 
+            //eto yung action listener para sa product button
+            if (!weightSubmitted) { //if hindi pa nag susubmit yung user pero kahit di na nga to isama ee kasi di naman mapipindot proceed pag di valid yung ininput ni user
+                ImageIcon icon = new ImageIcon("Windows\\pictures\\download (3).jfif"); 
+                Image scaledImage = icon.getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH); 
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+                JOptionPane.showMessageDialog(this, "Please enter the weight before proceeding.", "Missing Weight", JOptionPane.WARNING_MESSAGE, scaledIcon);
+            } else {
+                //eto na yung pag valid na tas na submit na din niya. pwede na siya magproceed
+                double weight = Double.parseDouble(weightTextField.getText());
+                ProductWindow pd = new ProductWindow(weight);
+                pd.setVisible(true);
+                pd.setLocationRelativeTo(null);
+                dispose();
+            }
+        } else if (e.getSource() == refreshButton) {
+            // eto yung pag refresh ng window para pag gusto niyang ibang weight
+            HomeWindow home = new HomeWindow();
+            home.setVisible(true);
+            home.setLocationRelativeTo(null);
+            this.dispose();
         }
     }
 
+    //eto design nung sa products, weight, tas amount
     private void displayProducts(List<Product> products) {
         mainContainerPanel.removeAll();
-
+        //eto yung tatlong text label
         JPanel labelPanel = new JPanel(new GridLayout(1, 3));
         labelPanel.setBackground(new Color(129, 104, 157));
 
@@ -190,10 +199,11 @@ public class HomeWindow extends JFrame implements ActionListener {
         labelPanel.setBounds(150, 0, 1270, 50);
         mainContainerPanel.add(labelPanel);
 
-        int yPosition = 70;
+        int yPosition = 70; //set tayo ng gap between y axis ng buong main panel
 
+        //eto na yung design sa loob ng main panel
         for (Product product : products) {
-            // Display product information
+            // for product
             JPanel productPanel = new JPanel();
             productPanel.setLayout(null);
             productPanel.setBackground(new Color(255, 230, 230));
@@ -202,6 +212,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             productPanel.setBorder(productPanelBorder);
             mainContainerPanel.add(productPanel);
 
+            //picture nung product
             ImageIcon productImageIcon = new ImageIcon(product.imagePath);
             Image productImage = productImageIcon.getImage().getScaledInstance(190, 150, Image.SCALE_SMOOTH);
             ImageIcon scaledProductImageIcon = new ImageIcon(productImage);
@@ -210,6 +221,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             productImageLabel.setBounds(0, 0, 200, 160);
             productPanel.add(productImageLabel);
 
+            //name nung product
             JPanel productPanelName = new JPanel();
             productPanelName.setBounds(0, 160, 200, 40);
             Border productBorder = BorderFactory.createLineBorder(new Color(210, 145, 188), 1);
@@ -227,6 +239,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             weightPanel.setBounds(530, yPosition + 70, 200, 40);
             mainContainerPanel.add(weightPanel);
 
+            // weight value
             JLabel weightPanelText = new JLabel(String.valueOf(product.weight)); // Convert double to String
             weightPanelText.setForeground(new Color(129, 104, 157));
             weightPanelText.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -246,6 +259,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             amountPanel.setBounds(940, yPosition + 70, 200, 40);
             mainContainerPanel.add(amountPanel);
 
+            //amount value
             JLabel amountPanelText = new JLabel(String.valueOf(product.amount));
             amountPanelText.setForeground(new Color(129, 104, 157));
             amountPanelText.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -261,7 +275,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             amountPanel.add(amountPanelText);
             yPosition += 250;
         }
-
+        //for total amount
         double totalAmount = calculateTotalAmount(products);
         displayTotalAmount(totalAmount);
 
@@ -277,6 +291,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         return totalAmount;
     }
 
+    //design ng total amount
     private void displayTotalAmount(double totalAmount) {
         JPanel totalAmountPanel = new JPanel();
         totalAmountPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); 
@@ -300,6 +315,8 @@ public class HomeWindow extends JFrame implements ActionListener {
         totalAmountLabel.setFont(new Font("Monospaced", Font.BOLD, fontSize)); 
         totalAmountPanel.add(totalAmountLabel); 
     }
+
+    //eto laman nung product
     static class Product {
         String name;
         double weight;
@@ -330,6 +347,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         products.add(new Product("Soap", 7, 500, "Windows\\pictures\\Untitled.jfif"));
     }
 
+    //algorithm sa knapsack
     static List<Product> selectProductsForWeight(double weight) {
         List<Product> selectedProducts = new ArrayList<>();
         int n = products.size();
