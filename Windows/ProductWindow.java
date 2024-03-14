@@ -1,4 +1,4 @@
-/* 
+///* 
 package Windows;
 import javax.swing.*;
 import java.awt.*;
@@ -207,12 +207,9 @@ public class ProductWindow extends JFrame {
             return String.format("%-60s %-60s %-60s", name, weight, amount);
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ProductGUI());
-    }
 }
-*/
+//*/ 
+/*
 package Windows;
 
 import java.awt.Color;
@@ -278,3 +275,4 @@ public class ProductWindow extends JFrame implements ActionListener {
         weightLabel.setText("Weight: " + weight + " kg"); 
     }
 }
+*/
