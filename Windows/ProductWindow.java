@@ -87,9 +87,9 @@ public class ProductWindow extends JFrame implements ActionListener {
        table.setRowHeight(35);
        table.setBackground(new Color(255, 204, 229));
 
-    //width ng productNames 
+    //width for productNames 
     TableColumn column = table.getColumnModel().getColumn(0);
-    column.setPreferredWidth(350); // Adjust the width as needed to accommodate longer product names
+    column.setPreferredWidth(350);
 
     JScrollPane scrollPane = new JScrollPane(table);
     tablePanel.add(scrollPane, BorderLayout.CENTER);
@@ -133,7 +133,7 @@ public class ProductWindow extends JFrame implements ActionListener {
        
         List<List<Product>> combinations = findCombinations(products);
     
-        // Sort the combinations
+        // Sort mo manomano combinations
      Collections.sort(combinations, new Comparator<List<Product>>() {
     @Override
     public int compare(List<Product> combination1, List<Product> combination2) {
@@ -183,7 +183,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         Result result = new Result();
         result.selectedProducts = new ArrayList<>(this.productList);
 
-        // Sort the selected products by proximity to the target weight
+        // Sort the selected products
         Collections.sort(result.selectedProducts, new Comparator<Product>() {
             @Override
             public int compare(Product product1, Product product2) {
