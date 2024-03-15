@@ -167,7 +167,7 @@ public class StJohn extends JFrame {
                 {100, 120, 0, 200},
                 {200, 200, 100, 0}
         };
-        resultTextArea.append("\t\t\tAll Possible Routes on Lanao" + "\n");
+        resultTextArea.append("\t\t\tAll Possible Routes on St. John" + "\n");
         boolean[] visited = new boolean[4];
         setAllFalse(visited);
 
