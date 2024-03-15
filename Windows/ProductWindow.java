@@ -42,11 +42,11 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Product Label
         JPanel productLabelPanel = new JPanel();
         productLabelPanel.setBackground(new Color(255, 204, 229));
-        productLabelPanel.setBounds(50, 50, 500, 50);
+        productLabelPanel.setBounds(20, 10, 530, 60);
         productLabelPanel.setLayout(new BorderLayout());
 
         JLabel productListLabel = new JLabel("PRODUCTS");
-        productListLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        productListLabel.setFont(new Font("Arial", Font.BOLD, 25));
         productListLabel.setHorizontalAlignment(SwingConstants.CENTER);
         productLabelPanel.add(productListLabel, BorderLayout.CENTER);
         add(productLabelPanel);
@@ -55,12 +55,12 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Weight Label
         JPanel weightLabelPanel = new JPanel();
         weightLabelPanel.setBackground(new Color(255, 204, 229));
-        weightLabelPanel.setBounds(50, 100, 500, 50);
+        weightLabelPanel.setBounds(20, 60, 530, 75);
         weightLabelPanel.setLayout(new BorderLayout());
 
         JLabel weightLabel = new JLabel("Weight: " + weight + " kg");
         weightLabel.setForeground(new Color(32, 32, 32));
-        weightLabel.setFont(new Font("Monospaced Bold Italic", Font.BOLD, 14));
+        weightLabel.setFont(new Font("Monospaced Bold Italic", Font.BOLD, 19));
         weightLabel.setHorizontalAlignment(SwingConstants.CENTER);
         weightLabelPanel.add(weightLabel, BorderLayout.CENTER);
         add(weightLabelPanel);
@@ -68,7 +68,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Table
         JPanel tablePanel = new JPanel();
         tablePanel.setBackground(new Color(255, 204, 229));
-        tablePanel.setBounds(50, 150, 500, 400);
+        tablePanel.setBounds(20, 120, 530, 530);
         tablePanel.setLayout(new BorderLayout());
         tablePanel.setEnabled(false);
 
@@ -84,8 +84,9 @@ public class ProductWindow extends JFrame implements ActionListener {
         JTable table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.PLAIN, 14));
         table.setEnabled(false);
-        table.setRowHeight(25);
+        table.setRowHeight(35);
         table.setBackground(new Color(255, 204, 229));
+        
         //table.setBackground(new Color(255, 204, 229));
 
         JScrollPane scrollPane = new JScrollPane(table);
