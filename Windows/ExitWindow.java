@@ -147,7 +147,7 @@ public class ExitWindow extends JFrame implements ActionListener{
     }
 
     static {
-        programmers.add(new Programmers("Windows\\pictures\\jhoana.png", "Jhoana Decarla Barrameda", "Technical Writer, Algorithm Developer for No. 4"));
+        programmers.add(new Programmers("Windows\\pictures\\jhoana.jpeg", "Jhoana Decarla Barrameda", "Technical Writer, Algorithm Developer for No. 4"));
         programmers.add(new Programmers("Windows\\pictures\\erlyn.jpeg", "Erlyn Queen De Leon","Project and Layout Manager, Algorithm Developer for No. 1"));
         programmers.add(new Programmers("Windows\\pictures\\lyrine.jpeg", "Lyrine Poliarco", "Researcher, Algorithm Developer for No. 2"));
         programmers.add(new Programmers("Windows\\pictures\\angelica.jpeg", "Angelica Toquero", "Tester, Algorithm Developer for No. 3"));

@@ -1,4 +1,13 @@
-/*package Windows;
+// palitan yung algorithm, hindi tinatanggap ng window na to pag ang address is may kasamang comma sa dulo
+// try mo ilagay St peter, peter, peter
+// ang lalabas lang sa no. of occur is 1
+// and word position is 3
+// make sure na maayos na algo nito ngayon 
+// ayusin design pag aralan
+// designan niyo buttons 
+
+
+package Windows;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,145 +15,110 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SearchWindow extends JFrame {
-    private JTextArea searchResultArea;
-    private String customerAddress;
+    private JPanel searchPanel;
+    private JTextField searchField;
+    private JButton searchButton;
+    private JTextArea resultArea;
+    private JButton proceedButton; 
+    private String address;
 
-    public SearchWindow(String address) {
-        this.customerAddress = address;
+    SearchWindow(String address) {
+        this.address = address;
 
-        setTitle("Search Address");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        // Frame setup
+        setTitle("Search Window");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        // Set up the UI components
-        JLabel searchLabel = new JLabel("Search Address:");
-        JTextField searchField = new JTextField();
-        searchField.setPreferredSize(new Dimension(200, 30));
+        // Search Panel
+        setupSearchPanel();
 
-        // Create the search button
-        JButton searchButton = new JButton("Search");
-        searchButton.addActionListener(new ActionListener() {
+        // Result TextArea
+        resultArea = new JTextArea(10, 30);
+        resultArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(resultArea);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Exit Button Panel
+        JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        proceedButton = new JButton("Proceed");
+        proceedButton.setEnabled(false); 
+        proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (customerAddress != null) { // Check if customerAddress is not null
-                    String searchText = searchField.getText();
-                    search(searchText);
-                } else {
-                    JOptionPane.showMessageDialog(SearchWindow.this, "Customer address is null!", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                ExitWindow ew = new ExitWindow();
+                ew.setVisible(true);
+                ew.setLocationRelativeTo(null);
+                dispose(); 
             }
         });
-
-        // Set up the search result area
-        searchResultArea = new JTextArea();
-        searchResultArea.setEditable(false);
-        JScrollPane resultScrollPane = new JScrollPane(searchResultArea);
-
-        // Arrange UI components
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.add(searchLabel, BorderLayout.WEST);
-        panel.add(searchField, BorderLayout.CENTER);
-        panel.add(searchButton, BorderLayout.EAST);
-        add(panel, BorderLayout.NORTH);
-        add(resultScrollPane, BorderLayout.CENTER);
+        exitPanel.add(proceedButton);
+        add(exitPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    private void search(String searchText) {
-        if (customerAddress != null && !customerAddress.isEmpty()) {
-            String lowercaseInputAddress = customerAddress.toLowerCase();
-            String lowercaseSearchText = searchText.toLowerCase();
-    
-            int occurrences = 0;
-            StringBuilder positions = new StringBuilder();
-    
-            int index = indexOfIgnoreCase(lowercaseInputAddress, lowercaseSearchText);
-            while (index != -1) {
-                occurrences++;
-                if (positions.length() > 0) {
-                    positions.append(", ");
-                }
-                positions.append(getWordPosition(customerAddress, index) + 1); // Add 1 to adjust position (1-based index)
-                index = indexOfIgnoreCase(lowercaseInputAddress, lowercaseSearchText, index + 1);
+    private void setupSearchPanel() {
+        searchPanel = new JPanel();
+        searchPanel.setLayout(new FlowLayout());
+        JLabel searchLabel = new JLabel("Search Term:");
+        searchField = new JTextField(20);
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchButtonClicked();
             }
-    
-            StringBuilder result = new StringBuilder();
-            if (occurrences > 0) {
-                result.append("Address: ").append(customerAddress).append("\n");
-                result.append("Number of Occurrences: ").append(occurrences).append("\n");
-                result.append("Word's Position: ").append(positions);
-            } else {
-                result.append("No occurrences found for the word \"").append(searchText).append("\"");
-            }
-    
-            searchResultArea.setText(result.toString());
+        });
+
+        searchPanel.add(searchLabel);
+        searchPanel.add(searchField);
+        searchPanel.add(searchButton);
+
+        add(searchPanel, BorderLayout.NORTH);
+    }
+
+    private void searchButtonClicked() {
+        String searchTerm = searchField.getText().toLowerCase();
+        if (searchTerm.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a search term.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
         } else {
-            searchResultArea.setText("Customer address is null or empty!");
+            searchAndDisplay(searchTerm);
+            proceedButton.setEnabled(true); 
         }
     }
 
-    private int indexOfIgnoreCase(String input, String search) {
-        return indexOfIgnoreCase(input, search, 0);
-    }
+    private void searchAndDisplay(String searchTerm) {
+        String[] addresses = address.split("\n");
 
-    private int indexOfIgnoreCase(String input, String search, int fromIndex) {
-        for (int i = fromIndex; i < input.length() - search.length() + 1; i++) {
-            if (input.regionMatches(true, i, search, 0, search.length())) {
-                return i;
+        int totalOccurrences = 0;
+        StringBuilder resultText = new StringBuilder();
+        StringBuilder positions = new StringBuilder();
+
+        for (int i = 0; i < addresses.length; i++) {
+            String currentAddress = addresses[i];
+            if (currentAddress.toLowerCase().contains(searchTerm)) {
+                totalOccurrences++;
+                resultText.append("\nAddress: ").append(currentAddress).append("\n");
+
+                String[] words = currentAddress.split("\\s+");
+                for (int j = 0; j < words.length; j++) {
+                    if (words[j].toLowerCase().equals(searchTerm)) {
+                        positions.append(j + 1).append(", ");
+                    }
+                }
             }
         }
-        return -1;
-    }
 
-    private int getWordPosition(String inputAddress, int currentIndex) {
-        int position = 0;
-        for (int i = 0; i < currentIndex; i++) {
-            if (Character.isWhitespace(inputAddress.charAt(i))) {
-                position++;
-            }
+        if (totalOccurrences > 0) {
+            positions.delete(positions.length() - 2, positions.length());
+            resultText.append("Number of Occurrences: ").append(totalOccurrences).append("\n");
+            resultText.append("Word's Position(s): ").append(positions);
+        } else {
+            resultText.append("No occurrences of the searched word found in the address.");
         }
-        return position;
+
+        resultArea.setText(resultText.toString());
     }
-}*/
-package Windows;
-
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-public class SearchWindow extends JFrame {
-
-    private String address;
-    private JLabel addressLabel = new JLabel();
-
-    JLabel label = new JLabel();
-
-    SearchWindow() {
-        this.add(label);
-        // ImageIcon icon = new ImageIcon("Windows\pictures\1-removebg-preview.png");
-        // this.setIconImage(icon.getImage());
-        this.getContentPane().setBackground(new Color(129, 104, 157));
-        this.setSize(1500, 900);
-        this.setLayout(null);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-
-        addressLabel.setBounds(668, 480, 150, 50);
-        addressLabel.setForeground(Color.WHITE);
-        addressLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        addressLabel.setText("Address: " + address);
-        this.add(addressLabel);
-    }
-
-    public SearchWindow(String address) {
-        this();
-        this.address = address;
-        addressLabel.setText("Address: " + address); // Update with appropriate address
-    }
-
 }
