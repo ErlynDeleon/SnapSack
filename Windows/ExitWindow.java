@@ -71,7 +71,7 @@ public class ExitWindow extends JFrame implements ActionListener{
 
             // Name and Role Panel
               JPanel nameRolePanel = new JPanel();
-              nameRolePanel.setLayout(null); // Use absolute positioning
+              nameRolePanel.setLayout(null); 
               nameRolePanel.setBounds(panelWidth / 2, 0, panelWidth / 2, panelHeight);
               nameRolePanel.setBackground(new Color(73, 16, 139));
               programmerPanel.add(nameRolePanel);
@@ -79,24 +79,22 @@ public class ExitWindow extends JFrame implements ActionListener{
               JLabel nameLabel = new JLabel(programmer.fullName);
               nameLabel.setForeground(new Color(226, 110, 229));
               nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
-              nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30); // Adjust position and size
-              nameRolePanel.add(nameLabel);
+              nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30); 
 
               String[] roles = programmer.role.split(", "); 
 
-              // Main Role Label
-              JLabel mainRoleLabel = new JLabel(roles[0]); // Assuming the first role is the main role
+              JLabel mainRoleLabel = new JLabel(roles[0]); 
               mainRoleLabel.setForeground(new Color(226, 110, 229));
               mainRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-              mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20); // Adjust position and size
+              mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20); 
               nameRolePanel.add(mainRoleLabel);
 
-              // Secondary Role Label
-              if (roles.length > 1) { // Check if there is a secondary role
-                  JLabel secondaryRoleLabel = new JLabel(roles[1]); // Assuming the second role is the secondary role
+      
+              if (roles.length > 1) { 
+                  JLabel secondaryRoleLabel = new JLabel(roles[1]); 
                   secondaryRoleLabel.setForeground(new Color(226, 110, 229));
                   secondaryRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-                  secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20); // Adjust position and size
+                  secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20); 
                   nameRolePanel.add(secondaryRoleLabel);
               }
 
@@ -154,7 +152,7 @@ public class ExitWindow extends JFrame implements ActionListener{
         programmers.add(new Programmers("Windows\\pictures\\lyrine.jpeg", "Lyrine Poliarco", "Researcher, Algorithm Developer for No. 2"));
         programmers.add(new Programmers("Windows\\pictures\\angelica.jpeg", "Angelica Toquero", "Tester, Algorithm Developer for No. 3"));
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
       if (e.getSource() == exitButton) {

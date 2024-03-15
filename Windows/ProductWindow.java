@@ -186,4 +186,10 @@ public class ProductWindow extends JFrame implements ActionListener {
             return String.format("%-60s %-60s %-60s", name, weight, amount);
         }
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+    }
 }
