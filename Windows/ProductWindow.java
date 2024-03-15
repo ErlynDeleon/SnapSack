@@ -1,6 +1,7 @@
 package Windows;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -90,18 +91,31 @@ public class ProductWindow extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane(table);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         add(tablePanel);
-
+         // Inside your initUI() method, after setting the title and other properties
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\2-removebg-preview.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        imageLabel.setBounds(515, 200, 500, 200); // Set the bounds according to your layout
+        add(imageLabel);
+         
 
         // Panel for Proceed Button
         JPanel proceedButtonPanel = new JPanel();
         proceedButtonPanel.setBounds(600, 550, 300, 30);
         proceedButtonPanel.setLayout(new BorderLayout());
 
-
+        
         JButton proceedButton = new JButton("Proceed");
         proceedButton.setForeground(new Color(33, 33, 33));
         proceedButton.setBackground(new Color(255, 153, 204));
         proceedButton.setFont(new Font("Arial", Font.BOLD, 20));
+        /*ImageIcon image = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
+        Border border = BorderFactory.createLineBorder(new Color(254, 200, 216), 5);
+        // image/logo design
+        label.setIcon(image);
+        label.setBorder(border);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setHorizontalAlignment(JLabel.CENTER);*/
+
         proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
