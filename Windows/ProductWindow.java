@@ -65,11 +65,13 @@ public class ProductWindow extends JFrame implements ActionListener {
         tablePanel.setBackground(new Color(255, 204, 229));
         tablePanel.setBounds(50, 150, 500, 400);
         tablePanel.setLayout(new BorderLayout());
+        tablePanel.setEnabled(false);
 
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Product Names");
         tableModel.addColumn("Total Weight");
         tableModel.addColumn("Total Amount");
+       
 
         List<List<Product>> combinations = findCombinations(productList);
         for (List<Product> combination : combinations) {
@@ -94,6 +96,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         table.setEnabled(false);
         table.setRowHeight(25);
         table.setBackground(new Color(255, 204, 229));
+        //table.setBackground(new Color(255, 204, 229));
 
         JScrollPane scrollPane = new JScrollPane(table);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
@@ -108,7 +111,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         JButton proceedButton = new JButton("Proceed");
         proceedButton.setForeground(new Color(33, 33, 33));
         proceedButton.setBackground(new Color(255,153,204));
-        proceedButton.setFont(new Font("Monospaced Bold", Font.BOLD, 20));
+        proceedButton.setFont(new Font("Arial", Font.BOLD, 20));
         proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
