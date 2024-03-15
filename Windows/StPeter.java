@@ -5,32 +5,19 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class StPeter extends JFrame {
     private JTextField nameField;
     private JTextField addressField;
     private JTextArea displayArea;
     private JTextArea resultTextArea;
+    private String customerAddress;
 
 
-    // Define locations and distances arrays
-    private String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
-    private int[][] distances = {
-            {0, 300, 150, 200},
-            {150, 0, 200, 300},
-            {100, 120, 0, 200},
-            {200, 200, 100, 0}
-    };
-
-    // Public accessor method to retrieve the address field
-    public JTextField getAddressField() {
-        return addressField;
-    }
 
     public StPeter() {
         setTitle("SnapSack");
-        setSize(1200, 800); // Set window size to 900 width and 1000 height
+        setSize(1300, 800); // Set window size to 900 width and 1000 height
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -108,24 +95,28 @@ public class StPeter extends JFrame {
         distanceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                calculateRoutes();
+                performTSP();
                 distanceButton.setEnabled(false);
             }
         });
        
         JButton proceedButton = new JButton("PROCEED");
-        proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
-       
-        proceedButton.addActionListener(new ActionListener() {
-           
-        @Override
-            public void actionPerformed(ActionEvent e) {
-                SearchWindow sw = new SearchWindow(null);
-                sw.setVisible(true);
-                sw.setLocationRelativeTo(null);
-                dispose();
-            }
-        });
+proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
+
+proceedButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Get the address from the class-level customerAddress field
+        String address = addressField.getText();
+        
+        // Open the SearchWindow with the name and address
+        SearchWindow searchWindow = new SearchWindow(address);
+        searchWindow.setVisible(true);
+        searchWindow.setLocationRelativeTo(null);
+        dispose(); // Close the StPeter window
+    }
+});
+
 
         // Display Area of Customer Name and Address
         displayArea = new JTextArea();
@@ -173,81 +164,74 @@ public class StPeter extends JFrame {
 
         setVisible(true); // Make the window visible after all components are added
     }
+    int numVertices = 4;
+    private void performTSP() {
+        int[][] graph = {
+                {0, 300, 150, 200},
+                {150, 0, 200, 300},
+                {100, 120, 0, 200},
+                {200, 200, 100, 0}
+        };
+        resultTextArea.append("\t\t\tAll Possible Routes on St. Peter" + "\n");
+        boolean[] visited = new boolean[numVertices];
+        setAllFalse(visited);
 
-    // algo for tsp
-    private void calculateRoutes() {
-        int[] path = new int[4]; // Specific value of location length (4)
-        for (int i = 0; i < 4; i++) {
-            path[i] = i;
+        int[] path = new int[numVertices];
+        for (int i = 0; i < numVertices; i++) {
+            path[i] = -1;
         }
 
-        ArrayList<int[]> allPaths = new ArrayList<>();
-        permute(path, 1, allPaths); // Start permutation from index 1
+        path[0] = 0;
+        visited[0] = true;
+        tsp(0, 1, 0, path, graph, visited);
 
-        int shortestDistance = 10000; // Set an arbitrary large value
-        int[] shortestPath = null;
-
-        StringBuilder output = new StringBuilder();
-        // Print the header line
-    output.append("\tAll Possible Routes Starting on St.Peter Street\n\n");
-        for (int[] p : allPaths) {
-            int distance = calculateDistance(p);
-            if (distance < shortestDistance) {
-                shortestDistance = distance;
-                shortestPath = p;
-            }
-            output.append(formatPath(p)).append("\n");
-        }
-
-        output.append("\n\t\t\tShortest Path:\n").append(formatPath(shortestPath));
-        resultTextArea.setText(output + "");
+        resultTextArea.append("\n\t\t\t\tShortest Path: \n");
+        resultTextArea.append(shortestPath + "\n");
     }
 
-    private String formatPath(int[] path) {
-        StringBuilder formattedPath = new StringBuilder();
-        for (int i = 0; i < 4; i++) { // Specific value (4)
-            formattedPath.append(locations[path[i]]);
-            if (i != 3) { // Specific value (4 - 1 = 3)
-                formattedPath.append(" -> ");
-            }
+    private void setAllFalse(boolean[] array) {
+        for (int i = 0; i < numVertices; i++) {
+            array[i] = false;
         }
-        
-        formattedPath.append(" -> ").append(locations[path[0]]).append(" = ").append(calculateDistance(path)).append(" km");
-        return formattedPath.toString();
     }
 
-    private int calculateDistance(int[] path) {
-        int distance = 0;
-        for (int i = 0; i < 3; i++) { // Specific value (4 - 1 = 3)
-            distance += distances[path[i]][path[i + 1]];
-        }
-        distance += distances[path[3]][path[0]]; // Return to starting point
-        return distance;
-    }
+    private int shortestDistance = 1000;
+    private String shortestPath;
 
-    private void permute(int[] path, int start, ArrayList<int[]> allPaths) {
-        if (start == 4) {
-            if (path[0] == 0) { // Check if the first location is "St. Peter"
-                int[] newPath = new int[4]; // Create a new array with length 4
-                System.arraycopy(path, 0, newPath, 0, 4); // Copy elements from path to newPath
-                allPaths.add(newPath); // Add the new path to allPaths
+    private void tsp(int currentVertex, int count, int dist, int[] path, int[][] graph, boolean[] visited) {
+        if (count == numVertices && graph[currentVertex][0] > 0) {
+            String route = buildRouteString(path, dist + graph[currentVertex][0]);
+            resultTextArea.append(route + "\n");
+            if (dist + graph[currentVertex][0] < shortestDistance) {
+                shortestDistance = dist + graph[currentVertex][0];
+                shortestPath = route;
             }
-        } else {
-            for (int i = start; i < 4; i++) { // Specific value (4)
-                swap(path, start, i);
-                permute(path, start + 1, allPaths);
-                swap(path, start, i);
+            return;
+        }
+
+        for (int i = 0; i < numVertices; i++) {
+            if (!visited[i] && graph[currentVertex][i] > 0) {
+                visited[i] = true;
+                path[count] = i;
+                tsp(i, count + 1, dist + graph[currentVertex][i], path, graph, visited);
+                visited[i] = false;
+                path[count] = -1;
             }
         }
     }
 
-    private void swap(int[] path, int i, int j) {
-        int temp = path[i];
-        path[i] = path[j];
-        path[j] = temp;
+    private String buildRouteString(int[] path, int dist) {
+        StringBuilder sb = new StringBuilder();
+        String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
+        for (int i = 0; i < numVertices; i++) {
+            sb.append(locations[path[i]]);
+            if (i < numVertices - 1) {
+                sb.append(" --> ");
+            }
+        }
+        sb.append(" --> ").append(locations[0]).append(" = ").append(dist).append("km");
+        return sb.toString();
     }
+
 }
-    
-  
-  //for next window
   
