@@ -1,15 +1,8 @@
-// dagdagan to! i make sure na isubmit muna ni user yung ininput. hindi tatanggapin ng program kapag walang laman yung input ng name at address. 
-// pag natapos na,  na submit na dapat i make sure din na pindutin muna ni user yung distance bago yung proceed
-// tignan niyo yung code ko sa homeWindow gawin niyo yon may mga if statement ako don sa line 115
-// pag aralan niyo code wag puro nakadepend sa gpt lalo na sa design and functionalities nung button para madali niyo madagdagan pag may error
-// beh ange papalitan ng kulay HAHAHAHA ikaw lang yung may yellow. ano nalang may touch of pink na yellow
-
 package Windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class Maguindanao extends JFrame {
     private JTextField nameField;
@@ -18,6 +11,8 @@ public class Maguindanao extends JFrame {
     private JTextArea resultTextArea;
 
     public Maguindanao() {
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
+        this.setIconImage(icon.getImage());
         setTitle("SnapSack");
         setSize(1300, 800); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,7 +22,7 @@ public class Maguindanao extends JFrame {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10)); 
-        inputPanel.setBackground(new Color(249, 232, 151));
+        inputPanel.setBackground(new Color(232, 147, 207));
 
         JLabel nameLabel = new JLabel("Enter Your Name:");
         nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
@@ -42,28 +37,46 @@ public class Maguindanao extends JFrame {
         addComponentsWithSpacing(inputPanel, addressLabel, 40);
         addComponentsWithSpacing(inputPanel, addressField, 0);
 
+        boolean[] isClicked = {false, false}; // Index 0 for isSubmitClicked, Index 1 for isDistanceClicked
+
         // Submit Button
         JButton submitButton = createButton("SUBMIT", 230, 60);
         submitButton.addActionListener(e -> {
             String name = nameField.getText();
             String address = addressField.getText();
-            String displayText = "\t\tCustomer's Information\n\n\n" +
-                    "Customer's Name: " + name + "\n\n\n\n" +
-                    "Address: " + address;
-            updateDisplayArea(displayText);
+            if (!name.isEmpty() && !address.isEmpty()) {
+                isClicked[0] = true;
+                String displayText = "\t\tCustomer's Information\n\n\n" +
+                        "Customer's Name: " + name + "\n\n\n\n" +
+                        "Address: " + address;
+                updateDisplayArea(displayText);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please fill in both Name and Address fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
-
+        
         // Distance Button
         JButton distanceButton = createButton("DISTANCE", 230, 60);
         distanceButton.addActionListener(e -> {
-            performTSP();
+            if (isClicked[0]) {
+                performTSP();
+                isClicked[1] = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Please fill up your information first.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
-
+        
+        // Proceed Button
         JButton proceedButton = createButton("PROCEED", 230, 60);
         proceedButton.addActionListener(e -> {
-            String address = addressField.getText();
-            openSearchWindow(address);
+            if (isClicked[1]) {
+                String address = addressField.getText();
+                openSearchWindow(address);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please calculate distance first.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
+        
 
         // Display Area of Customer Name and Address
         displayArea = createDisplayArea(300, 100);
@@ -98,7 +111,7 @@ public class Maguindanao extends JFrame {
         area.setEditable(false);
         area.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
         area.setForeground(Color.BLACK);
-        area.setBackground(new Color(255, 195, 116));
+       area.setBackground(new Color(243, 188, 200));
         area.setAlignmentX(Component.CENTER_ALIGNMENT);
         JScrollPane scrollPane = new JScrollPane(area);
         scrollPane.setPreferredSize(new Dimension(width, height));

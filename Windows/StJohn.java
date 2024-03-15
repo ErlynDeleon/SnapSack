@@ -1,25 +1,19 @@
-// dagdagan to! i make sure na isubmit muna ni user yung ininput. hindi tatanggapin ng program kapag walang laman yung input ng name at address. 
-// pag natapos na,  na submit na dapat i make sure din na pindutin muna ni user yung distance bago yung proceed
-// tignan niyo yung code ko sa homeWindow gawin niyo yon may mga if statement ako don sa line 115
-// pag aralan niyo code wag puro nakadepend sa gpt lalo na sa design and functionalities nung button para madali niyo madagdagan pag may error
-// beh ange papalitan ng kulay HAHAHAHA ikaw lang yung may yellow. ano nalang may touch of pink na yellow
-
 package Windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class StJohn extends JFrame {
     private JTextField nameField;
     private JTextField addressField;
     private JTextArea displayArea;
     private JTextArea resultTextArea;
-    private String customerAddress;
 
     public StJohn() {
-        setTitle("St. John Window");
+        ImageIcon icon = new ImageIcon("Windows\\pictures\\1-removebg-preview.png");
+        this.setIconImage(icon.getImage());
+        setTitle("SnapSack");
         setSize(1300, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,7 +21,7 @@ public class StJohn extends JFrame {
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-        inputPanel.setBackground(new Color(249, 232, 151));
+        inputPanel.setBackground(new Color(232, 147, 207));
 
         JLabel nameLabel = new JLabel("Enter Your Name:");
         nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
@@ -42,28 +36,46 @@ public class StJohn extends JFrame {
         addComponentsWithSpacing(inputPanel, addressLabel, 40);
         addComponentsWithSpacing(inputPanel, addressField, 0);
 
+        boolean[] isClicked = {false, false}; // Index 0 for isSubmitClicked, Index 1 for isDistanceClicked
+
         // Submit Button
         JButton submitButton = createButton("SUBMIT", 230, 60);
         submitButton.addActionListener(e -> {
             String name = nameField.getText();
             String address = addressField.getText();
-            String displayText = "\t\tCustomer's Information\n\n\n" +
-                    "Customer's Name: " + name + "\n\n\n\n" +
-                    "Address: " + address;
-            updateDisplayArea(displayText);
+            if (!name.isEmpty() && !address.isEmpty()) {
+                isClicked[0] = true;
+                String displayText = "\t\tCustomer's Information\n\n\n" +
+                        "Customer's Name: " + name + "\n\n\n\n" +
+                        "Address: " + address;
+                updateDisplayArea(displayText);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please fill in both Name and Address fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
-
+        
         // Distance Button
         JButton distanceButton = createButton("DISTANCE", 230, 60);
         distanceButton.addActionListener(e -> {
-            performTSP();
+            if (isClicked[0]) {
+                performTSP();
+                isClicked[1] = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Please fill up your information first.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
-
+        
+        // Proceed Button
         JButton proceedButton = createButton("PROCEED", 230, 60);
         proceedButton.addActionListener(e -> {
-            String address = addressField.getText();
-            openSearchWindow(address);
+            if (isClicked[1]) {
+                String address = addressField.getText();
+                openSearchWindow(address);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please calculate distance first.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
+        
 
         // Display Area of Customer Name and Address
         displayArea = createDisplayArea(300, 100);
@@ -98,7 +110,7 @@ public class StJohn extends JFrame {
         area.setEditable(false);
         area.setFont(new Font("Bookman Old Style", Font.BOLD, 16));
         area.setForeground(Color.BLACK);
-        area.setBackground(new Color(255, 195, 116));
+        area.setBackground(new Color(243, 188, 200));
         area.setAlignmentX(Component.CENTER_ALIGNMENT);
         JScrollPane scrollPane = new JScrollPane(area);
         scrollPane.setPreferredSize(new Dimension(width, height));
@@ -147,7 +159,6 @@ public class StJohn extends JFrame {
         setVisible(true);
     }
 
-    int numVertices = 4;
     // Algorithm
     private void performTSP() {
         int[][] graph = {
@@ -156,16 +167,16 @@ public class StJohn extends JFrame {
                 {100, 120, 0, 200},
                 {200, 200, 100, 0}
         };
-        resultTextArea.append("\t\t\tAll Possible Routes on St. John" + "\n");
-        boolean[] visited = new boolean[numVertices];
+        resultTextArea.append("\t\t\tAll Possible Routes on Lanao" + "\n");
+        boolean[] visited = new boolean[4];
         setAllFalse(visited);
 
-        int[] path = new int[numVertices];
-        for (int i = 0; i < numVertices; i++) {
+        int[] path = new int[4];
+        for (int i = 0; i < 4; i++) {
             path[i] = -1;
         }
-        //change of index to 1
-        path[0] = 1; 
+
+        path[0] = 1;
         visited[1] = true;
         tsp(1, 1, 0, path, graph, visited);
 
@@ -174,7 +185,7 @@ public class StJohn extends JFrame {
     }
 
     private void setAllFalse(boolean[] array) {
-        for (int i = 0; i < numVertices; i++) {
+        for (int i = 0; i < 4; i++) {
             array[i] = false;
         }
     }
@@ -183,17 +194,17 @@ public class StJohn extends JFrame {
     private String shortestPath;
 
     private void tsp(int currentVertex, int count, int dist, int[] path, int[][] graph, boolean[] visited) {
-        if (count == numVertices && graph[currentVertex][1] > 0) { // Check if all vertices are visited and there's a connection back to St. John
-            String route = buildRouteString(path, dist + graph[currentVertex][1]); // Add the distance back to St. John
+        if (count == 4 && graph[currentVertex][1] > 0) {
+            String route = buildRouteString(path, dist + graph[currentVertex][1]);
             resultTextArea.append(route + "\n");
             if (dist + graph[currentVertex][1] < shortestDistance) {
-                shortestDistance = dist + graph[currentVertex][1]; // Add the distance back to St. John
+                shortestDistance = dist + graph[currentVertex][1];
                 shortestPath = route;
             }
             return;
         }
 
-        for (int i = 0; i < numVertices; i++) {
+        for (int i = 0; i < 4; i++) {
             if (!visited[i] && graph[currentVertex][i] > 0) {
                 visited[i] = true;
                 path[count] = i;
@@ -206,10 +217,10 @@ public class StJohn extends JFrame {
 
     private String buildRouteString(int[] path, int dist) {
         StringBuilder sb = new StringBuilder();
-        String[] locations = {"St. John", "St. Peter", "Lanao", "Maguindanao"};
-        for (int i = 0; i < numVertices; i++) {
+        String[] locations = {"St. Peter", "St. John", "Lanao", "Maguindanao"};
+        for (int i = 0; i < 4; i++) {
             sb.append(locations[path[i]]);
-            if (i < numVertices - 1) {
+            if (i < 3) {
                 sb.append(" --> ");
             }
         }
@@ -221,6 +232,6 @@ public class StJohn extends JFrame {
         SearchWindow searchWindow = new SearchWindow(address);
         searchWindow.setVisible(true);
         searchWindow.setLocationRelativeTo(null);
-        dispose(); // Close the StJohn window
     }
 }
+

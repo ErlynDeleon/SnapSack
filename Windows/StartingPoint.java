@@ -3,8 +3,6 @@ package Windows;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
