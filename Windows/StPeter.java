@@ -13,8 +13,6 @@ public class StPeter extends JFrame {
     private JTextArea resultTextArea;
     private String customerAddress;
 
-
-
     public StPeter() {
         setTitle("SnapSack");
         setSize(1300, 800); // Set window size to 900 width and 1000 height
@@ -101,22 +99,21 @@ public class StPeter extends JFrame {
         });
        
         JButton proceedButton = new JButton("PROCEED");
-proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
+            proceedButton.setPreferredSize(new Dimension(230, 60)); // Set preferred size
 
-proceedButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // Get the address from the class-level customerAddress field
-        String address = addressField.getText();
-        
-        // Open the SearchWindow with the name and address
-        SearchWindow searchWindow = new SearchWindow(address);
-        searchWindow.setVisible(true);
-        searchWindow.setLocationRelativeTo(null);
-        dispose(); // Close the StPeter window
-    }
-});
-
+            proceedButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Get the address from the class-level customerAddress field
+                    String address = addressField.getText();
+                    
+                    // Open the SearchWindow with the name and address
+                    SearchWindow searchWindow = new SearchWindow(address);
+                    searchWindow.setVisible(true);
+                    searchWindow.setLocationRelativeTo(null);
+                    dispose(); // Close the StPeter window
+                }
+        });
 
         // Display Area of Customer Name and Address
         displayArea = new JTextArea();
@@ -164,6 +161,9 @@ proceedButton.addActionListener(new ActionListener() {
 
         setVisible(true); // Make the window visible after all components are added
     }
+
+
+    //algorithm
     int numVertices = 4;
     private void performTSP() {
         int[][] graph = {

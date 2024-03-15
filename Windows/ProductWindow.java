@@ -96,7 +96,7 @@ public class ProductWindow extends JFrame implements ActionListener {
     add(tablePanel);
 
          //para sa logo sa kanan na ndi ko mapantay! 
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\2-removebg-preview.png");
+        ImageIcon imageIcon = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
         JLabel imageLabel = new JLabel(imageIcon);
         imageLabel.setBounds(510, 200, 500, 200);
         add(imageLabel);
@@ -255,6 +255,12 @@ public class ProductWindow extends JFrame implements ActionListener {
         public String toString() {
             return String.format("%-60s %-60s %-60s", name, weight, amount);
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
 
 }

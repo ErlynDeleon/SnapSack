@@ -101,7 +101,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         this.setIconImage(icon.getImage());
         this.setTitle("SnapSack");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setSize(1500, 900);
         this.setLayout(null);
         this.setLocationRelativeTo(null);
