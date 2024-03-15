@@ -20,7 +20,7 @@ public class LandingWindow extends JFrame implements ActionListener {
     this.getContentPane().setBackground(new Color(255, 223, 211));
     this.setTitle("SnapSack");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setResizable(false);
+    this.setResizable(false );
     this.setSize(1500, 900);
     this.setVisible(true);
     this.setLayout(null);
