@@ -1,8 +1,8 @@
 package Windows;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 
 public class ProductWindow extends JFrame implements ActionListener {
     JLabel label = new JLabel();
@@ -66,32 +67,33 @@ public class ProductWindow extends JFrame implements ActionListener {
         add(weightLabelPanel);
 
         // Panel for Table
-        JPanel tablePanel = new JPanel();
-        tablePanel.setBackground(new Color(255, 204, 229));
-        tablePanel.setBounds(0, 115, 530, 600);
-        tablePanel.setLayout(new BorderLayout());
-        tablePanel.setEnabled(false);
+       JPanel tablePanel = new JPanel();
+       tablePanel.setBackground(new Color(255, 204, 229));
+       tablePanel.setBounds(0, 115, 530, 600);
+       tablePanel.setLayout(new BorderLayout());
+       tablePanel.setEnabled(false);
 
-        DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Product Names");
-        tableModel.addColumn("Total Weight");
-        tableModel.addColumn("Total Amount");
+       DefaultTableModel tableModel = new DefaultTableModel();
+       tableModel.addColumn("Product Names");
+       tableModel.addColumn("Total Weight");
+       tableModel.addColumn("Total Amount");
 
+       List<List<Product>> combinations = findCombinations(productList);
+       Result result = getClosestProducts(weight);
+       displayResult(result.selectedProducts, weight, tableModel);
+       JTable table = new JTable(tableModel);
+       table.setFont(new Font("Arial", Font.PLAIN, 14));
+       table.setEnabled(false);
+       table.setRowHeight(35);
+       table.setBackground(new Color(255, 204, 229));
 
-        List<List<Product>> combinations = findCombinations(productList);
-        Result result = getClosestProducts(weight); // Get the closest products
-        displayResult(result.selectedProducts, weight, tableModel); // Display the result
-        JTable table = new JTable(tableModel);
-        table.setFont(new Font("Arial", Font.PLAIN, 14));
-        table.setEnabled(false);
-        table.setRowHeight(35);
-        table.setBackground(new Color(255, 204, 229));
-        
-    
+    //width ng productNames 
+    TableColumn column = table.getColumnModel().getColumn(0);
+    column.setPreferredWidth(350); // Adjust the width as needed to accommodate longer product names
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
-        add(tablePanel);
+    JScrollPane scrollPane = new JScrollPane(table);
+    tablePanel.add(scrollPane, BorderLayout.CENTER);
+    add(tablePanel);
 
          //para sa logo sa kanan na ndi ko mapantay! 
         ImageIcon imageIcon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\2-removebg-preview.png");
@@ -128,12 +130,12 @@ public class ProductWindow extends JFrame implements ActionListener {
     }
 
     private void displayResult(List<Product> products, double targetWeight, DefaultTableModel tableModel) {
-        // Find combinations of products whose total weight is less than or equal to the input weight
+       
         List<List<Product>> combinations = findCombinations(products);
-
-        // Sort the combinations by the difference between total weight and target weight (ascending order)
+    
+        // Sort the combinations 
         Collections.sort(combinations, Comparator.comparingDouble(combination -> Math.abs(calculateTotalWeight(combination) - targetWeight)));
-
+    
         // Display the result
         for (List<Product> combination : combinations) {
             Object[] rowData = new Object[3];
@@ -145,13 +147,17 @@ public class ProductWindow extends JFrame implements ActionListener {
                 totalWeight += product.weight;
                 totalAmount += product.amount;
             }
-            productNames.delete(productNames.length() - 2, productNames.length());
+           
+            if (productNames.length() > 2) {
+                productNames.delete(productNames.length() - 2, productNames.length());
+            }
             rowData[0] = productNames.toString();
             rowData[1] = totalWeight;
             rowData[2] = totalAmount;
             tableModel.addRow(rowData);
         }
     }
+    
 
     private Result getClosestProducts(double targetWeight) {
         Result result = new Result();
@@ -231,8 +237,4 @@ public class ProductWindow extends JFrame implements ActionListener {
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // searchProducts();
-    }
 }
