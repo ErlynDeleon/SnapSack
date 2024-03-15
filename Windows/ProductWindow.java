@@ -42,7 +42,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Product Label
         JPanel productLabelPanel = new JPanel();
         productLabelPanel.setBackground(new Color(255, 204, 229));
-        productLabelPanel.setBounds(20, 10, 530, 60);
+        productLabelPanel.setBounds(0, 0, 530, 50);
         productLabelPanel.setLayout(new BorderLayout());
 
         JLabel productListLabel = new JLabel("PRODUCTS");
@@ -55,7 +55,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Weight Label
         JPanel weightLabelPanel = new JPanel();
         weightLabelPanel.setBackground(new Color(255, 204, 229));
-        weightLabelPanel.setBounds(20, 60, 530, 75);
+        weightLabelPanel.setBounds(0, 50, 530, 65);
         weightLabelPanel.setLayout(new BorderLayout());
 
         JLabel weightLabel = new JLabel("Weight: " + weight + " kg");
@@ -68,7 +68,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         // Panel for Table
         JPanel tablePanel = new JPanel();
         tablePanel.setBackground(new Color(255, 204, 229));
-        tablePanel.setBounds(20, 120, 530, 530);
+        tablePanel.setBounds(0, 115, 530, 600);
         tablePanel.setLayout(new BorderLayout());
         tablePanel.setEnabled(false);
 
@@ -87,19 +87,20 @@ public class ProductWindow extends JFrame implements ActionListener {
         table.setRowHeight(35);
         table.setBackground(new Color(255, 204, 229));
         
-        //table.setBackground(new Color(255, 204, 229));
+    
 
         JScrollPane scrollPane = new JScrollPane(table);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         add(tablePanel);
-         // Inside your initUI() method, after setting the title and other properties
+
+         //para sa logo sa kanan na ndi ko mapantay! 
         ImageIcon imageIcon = new ImageIcon("C:\\Users\\lyyri\\Downloads\\2-removebg-preview.png");
         JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setBounds(515, 200, 500, 200); // Set the bounds according to your layout
+        imageLabel.setBounds(510, 200, 500, 200);
         add(imageLabel);
          
 
-        // Panel for Proceed Button
+        // Panel for proceedButton
         JPanel proceedButtonPanel = new JPanel();
         proceedButtonPanel.setBounds(600, 550, 300, 30);
         proceedButtonPanel.setLayout(new BorderLayout());
@@ -109,13 +110,7 @@ public class ProductWindow extends JFrame implements ActionListener {
         proceedButton.setForeground(new Color(33, 33, 33));
         proceedButton.setBackground(new Color(255, 153, 204));
         proceedButton.setFont(new Font("Arial", Font.BOLD, 20));
-        /*ImageIcon image = new ImageIcon("Windows\\pictures\\2-removebg-preview.png");
-        Border border = BorderFactory.createLineBorder(new Color(254, 200, 216), 5);
-        // image/logo design
-        label.setIcon(image);
-        label.setBorder(border);
-        label.setVerticalAlignment(JLabel.CENTER);
-        label.setHorizontalAlignment(JLabel.CENTER);*/
+       
 
         proceedButton.addActionListener(new ActionListener() {
             @Override
