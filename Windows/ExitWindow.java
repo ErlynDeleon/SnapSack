@@ -70,35 +70,37 @@ public class ExitWindow extends JFrame implements ActionListener{
             picturePanel.add(pictureLabel);
 
             // Name and Role Panel
-              JPanel nameRolePanel = new JPanel();
-              nameRolePanel.setLayout(null); 
-              nameRolePanel.setBounds(panelWidth / 2, 0, panelWidth / 2, panelHeight);
-              nameRolePanel.setBackground(new Color(73, 16, 139));
-              programmerPanel.add(nameRolePanel);
+            JPanel nameRolePanel = new JPanel();
+            nameRolePanel.setLayout(null); 
+            nameRolePanel.setBounds(panelWidth / 2, 0, panelWidth / 2, panelHeight);
+            nameRolePanel.setBackground(new Color(73, 16, 139));
+            programmerPanel.add(nameRolePanel);
 
-              JLabel nameLabel = new JLabel(programmer.fullName);
-              nameLabel.setForeground(new Color(226, 110, 229));
-              nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
-              nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30); 
+            JLabel nameLabel = new JLabel(programmer.fullName);
+            nameLabel.setForeground(new Color(226, 110, 229));
+            nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
+            nameLabel.setBounds(10, 10, panelWidth / 2 - 20, 30); 
+            nameRolePanel.add(nameLabel);
 
-              String[] roles = programmer.role.split(", "); 
+            String[] roles = programmer.role.split(", "); 
 
-              JLabel mainRoleLabel = new JLabel(roles[0]); 
-              mainRoleLabel.setForeground(new Color(226, 110, 229));
-              mainRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-              mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20); 
-              nameRolePanel.add(mainRoleLabel);
+            // Main Role Label
+            JLabel mainRoleLabel = new JLabel(roles[0]); 
+            mainRoleLabel.setForeground(new Color(226, 110, 229));
+            mainRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
+            mainRoleLabel.setBounds(10, 60, panelWidth / 2 - 20, 20); 
+            nameRolePanel.add(mainRoleLabel);
 
-      
-              if (roles.length > 1) { 
-                  JLabel secondaryRoleLabel = new JLabel(roles[1]); 
-                  secondaryRoleLabel.setForeground(new Color(226, 110, 229));
-                  secondaryRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
-                  secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20); 
-                  nameRolePanel.add(secondaryRoleLabel);
-              }
+            // Secondary Role Label
+            if (roles.length > 1) { 
+                JLabel secondaryRoleLabel = new JLabel(roles[1]); 
+                secondaryRoleLabel.setForeground(new Color(226, 110, 229));
+                secondaryRoleLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
+                secondaryRoleLabel.setBounds(10, 90, panelWidth / 2 - 20, 20); 
+                nameRolePanel.add(secondaryRoleLabel);
+            }
 
-            startY += panelHeight + gap; 
+          startY += panelHeight + gap;
         }
 
         exitPanel.setBounds(0, 820, 800, 70);
